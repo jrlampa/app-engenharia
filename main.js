@@ -15,6 +15,10 @@ const server = express();
 server.use(cors());
 server.use(express.json());
 
+// Rotas da API
+const tracaoRoutes = require('./server/routes/tracao');
+server.use('/api/tracao', tracaoRoutes);
+
 // Exemplo de rota para cálculo de Queda de Tensão
 server.post('/calcular-queda', (req, res) => {
   const { tensao, corrente, resistencia } = req.body;
