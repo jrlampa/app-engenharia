@@ -2,10 +2,11 @@
   "name": "app-engenharia",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "src/electron/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "dev:backend": "nodemon src/backend/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +16,8 @@
     "cors": "^2.8.6",
     "electron": "^40.1.0",
     "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
   }
 }

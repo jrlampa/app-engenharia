@@ -6,7 +6,34 @@
 const express = require('express');
 const router = express.Router();
 
-router.post('/calcular', (req, res) => {
+/**
+ * DOCUMENTAÇÃO: Middleware de validação para cálculos de tração.
+ * Garante que os valores de entrada estejam dentro de faixas seguras de engenharia.
+ */
+const validarTracao = (req, res, next) => {
+  const { vão, pesoCabo, tracaoInicial } = req.body;
+
+  // 1. Verificar se são números positivos
+  if (vão <= 0 || pesoCabo <= 0 || tracaoInicial <= 0) {
+    return res.status(400).json({
+      erro: "Valores inválidos",
+      mensagem: "Vão, peso e tração devem ser maiores que zero."
+    });
+  }
+
+  // 2. Limite de Engenharia: Vão máximo (Ex: 200m para redes urbanas)
+  if (vão > 200) {
+    return res.status(400).json({
+      erro: "Vão excessivo",
+      mensagem: "O vão informado excede o limite de segurança para este cálculo (200m)."
+    });
+  }
+
+  // Se passar por tudo, segue para o cálculo
+  next();
+};
+
+router.post('/calcular', validarTracao, (req, res) => {
   try {
     const {
       vão,            // Distância entre postes (m)
