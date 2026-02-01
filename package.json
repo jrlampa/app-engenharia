@@ -35,11 +35,14 @@
     "cors": "^2.8.6",
     "csv-parser": "^3.2.0",
     "electron": "^40.1.0",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "winston": "^3.19.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
     "electron-builder": "^26.7.0",
+    "jest": "^30.2.0",
     "nodemon": "^3.1.11",
     "wait-on": "^9.0.3"
   }

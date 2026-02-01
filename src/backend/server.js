@@ -1,125 +1,77 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
-const csv = require('csv-parser');
+// Middleware de Logs e Validação
+const logger = require('./utils/logger');
+const { tracaoSchema, tensaoSchema, validate } = require('./utils/validation');
+
+// Services
+const { buscarMateriaisNoCSV } = require('./services/MaterialService');
+const { calcularTracao, calcularQuedaTensao } = require('./services/calcService');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-/**
- * DOCUMENTAÇÃO: Middleware de Tratamento de Erros e Sanitização.
- * Atende ao "The Security Mandate" e "Error Handling Standards" do rules.txt.
- */
-const logger = (msg) => console.log(`[${new Date().toISOString()}] ${msg}`);
-
+// Request logger middleware
 app.use((req, res, next) => {
-  // Sanitização básica: remove caracteres que podem injetar comandos
-  if (req.body) {
-    for (let key in req.body) {
-      if (typeof req.body[key] === 'string') {
-        req.body[key] = req.body[key].replace(/[;$]/g, "");
-      }
-    }
-  }
+  logger.info(`${req.method} ${req.url}`, { body: req.body });
   next();
 });
 
-// Wrapper Global para evitar crash com Stack Trace visível
+// Wrapper Global para evitar crash
 process.on('uncaughtException', (err) => {
-  logger(`FATAL ERROR: ${err.message}`);
+  logger.error(`FATAL ERROR: ${err.message}`, { stack: err.stack });
   // Não encerra abruptamente, tenta manter o estado
 });
 
-// Função auxiliar para ler CSV
-const buscarMateriaisNoCSV = (kitSugerido) => {
-  return new Promise((resolve) => {
-    const resultados = [];
-    let capturando = false;
-    const caminhoCSV = path.join(__dirname, 'data', 'RESUMO KITS MAIS USADOS.xlsx - ESTRUTURAS BRAÇO J.csv');
+// --- ROTAS ---
 
-    // Check if file exists before creating stream to avoid errors
-    if (!fs.existsSync(caminhoCSV)) {
-      console.error(`CSV file not found at: ${caminhoCSV}`);
-      return resolve([]);
-    }
-
-    fs.createReadStream(caminhoCSV)
-      .pipe(csv({ headers: false })) // Lemos sem cabeçalho fixo pois o arquivo é dinâmico
-      .on('data', (row) => {
-        const colunaIdentificador = row[1]; // Coluna B do Excel
-        const descricao = row[2];          // Coluna C do Excel
-        const quantidade = row[3];         // Coluna D do Excel
-
-        // Se achou o título do Kit (ex: CE2 BRAÇO J), começa a capturar
-        if (colunaIdentificador === kitSugerido) {
-          capturando = true;
-          return;
-        }
-
-        // Se encontrou outra linha de título ou linha vazia, para de capturar
-        if (capturando && (!colunaIdentificador || (colunaIdentificador.includes('BRAÇO J') && colunaIdentificador !== kitSugerido))) {
-          capturando = false;
-        }
-
-        if (capturando && colunaIdentificador) {
-          resultados.push({
-            codigo: colunaIdentificador,
-            item: descricao,
-            qtd: quantidade
-          });
-        }
-      })
-      .on('end', () => resolve(resultados));
-  });
-};
-
-app.post('/api/tracao/calcular', async (req, res) => {
+app.post('/api/tracao/calcular', validate(tracaoSchema), async (req, res) => {
   const { vao, pesoCabo, tracaoInicial } = req.body;
-  const flecha = (pesoCabo * Math.pow(vao, 2)) / (8 * tracaoInicial);
 
-  const sugestaoKit = flecha > 1.5 ? "CE3 BRAÇO J" : "CE2 BRAÇO J";
+  // Lógica de cálculo delegada para o Service
+  const { flecha, sugestao } = calcularTracao(vao, pesoCabo, tracaoInicial);
 
-  // CHAMADA REAL AO CSV
-  const materiais = await buscarMateriaisNoCSV(sugestaoKit);
+  // Acesso a Dados delegado para o Service
+  try {
+    const materiais = await buscarMateriaisNoCSV(sugestao);
 
-  res.json({
-    sucesso: true,
-    resultado: {
-      flecha: flecha.toFixed(2),
-      sugestao: sugestaoKit,
-      materiais: materiais // Enviando a lista para o React
-    }
-  });
+    // Log de sucesso
+    logger.info("Cálculo de tração realizado com sucesso", { flecha, sugestao });
+
+    res.json({
+      sucesso: true,
+      resultado: {
+        flecha,
+        sugestao,
+        materiais
+      }
+    });
+  } catch (error) {
+    logger.error("Erro no processamento do kit", { error: error.message });
+    res.status(500).json({
+      sucesso: false,
+      error: error.message || "Erro interno ao buscar materiais."
+    });
+  }
 });
-
 
 /**
  * DOCUMENTAÇÃO: Cálculo de Queda de Tensão
  * Baseado na norma NBR 5410 / Planilha de Queda de Tensão.
  */
-app.post('/api/tensao/calcular', (req, res) => {
+app.post('/api/tensao/calcular', validate(tensaoSchema), (req, res) => {
   const { tensaoNominal, corrente, comprimento, resistenciaKm } = req.body;
 
-  // 1. Cálculo da queda de tensão unitária (V)
-  // DeltaV = (2 * L * I * R) / 1000  (Para monofásico)
-  const quedaVolts = (2 * comprimento * corrente * resistenciaKm) / 1000;
+  // Lógica de cálculo delegada para o Service
+  const resultado = calcularQuedaTensao(tensaoNominal, corrente, comprimento, resistenciaKm);
 
-  // 2. Cálculo percentual
-  const quedaPercentual = (quedaVolts / tensaoNominal) * 100;
-
-  // Limite normativo geralmente é 5%
-  const status = quedaPercentual > 5 ? "CRÍTICO" : "DENTRO DO LIMITE";
+  logger.info("Cálculo de queda de tensão realizado", resultado);
 
   res.json({
     sucesso: true,
-    resultado: {
-      quedaVolts: quedaVolts.toFixed(2),
-      quedaPercentual: quedaPercentual.toFixed(2),
-      status: status
-    }
+    resultado
   });
 });
 
-app.listen(5000, () => console.log("Backend com suporte a CSV rodando."));
+app.listen(5000, () => logger.info("Backend modularizado rodando na porta 5000."));

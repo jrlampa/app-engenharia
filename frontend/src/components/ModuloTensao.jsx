@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-
-const TABELA_CABOS = [
-  { nome: "10mm²", r: 1.83 },
-  { nome: "16mm²", r: 1.15 },
-  { nome: "25mm²", r: 0.727 },
-  { nome: "35mm²", r: 0.524 }
-];
+import { TABELA_CABOS } from '../config/constants';
 
 const ModuloTensao = () => {
   const [tensaoData, setTensaoData] = useState({ nominal: 220, corrente: 10, dist: 50, caboR: 1.83 });
@@ -13,17 +7,30 @@ const ModuloTensao = () => {
 
   const calcularTensao = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/tensao/calcular', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      let data;
+      // Verifica se está rodando no Electron via IPC
+      if (window.electronAPI) {
+        data = await window.electronAPI.calcularTensao({
           tensaoNominal: Number(tensaoData.nominal),
           corrente: Number(tensaoData.corrente),
           comprimento: Number(tensaoData.dist),
           resistenciaKm: Number(tensaoData.caboR)
-        })
-      });
-      const data = await response.json();
+        });
+      } else {
+        // Fallback HTTP
+        const response = await fetch('http://localhost:5000/api/tensao/calcular', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tensaoNominal: Number(tensaoData.nominal),
+            corrente: Number(tensaoData.corrente),
+            comprimento: Number(tensaoData.dist),
+            resistenciaKm: Number(tensaoData.caboR)
+          })
+        });
+        data = await response.json();
+      }
+
       if (data.sucesso) setRes(data.resultado);
     } catch (error) {
       console.error("Erro ao calcular tensão:", error);

@@ -9,12 +9,22 @@ const ModuloTracao = () => {
   const calcular = async () => {
     setErro("");
     try {
-      const response = await fetch('http://localhost:5000/api/tracao/calcular', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dados)
-      });
-      const data = await response.json();
+      let data;
+      // Verifica se está rodando no Electron via IPC
+      if (window.electronAPI) {
+        console.log("Usando IPC Electron...");
+        data = await window.electronAPI.calcularTracao(dados);
+      } else {
+        // Fallback para HTTP (Web Browser)
+        console.log("Usando HTTP Fetch...");
+        const response = await fetch('http://localhost:5000/api/tracao/calcular', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dados)
+        });
+        data = await response.json();
+      }
+
       if (data.sucesso) setResultado(data.resultado);
       else setErro(data.error);
     } catch (err) {
