@@ -1,16 +1,31 @@
 const fs = require('fs');
 const path = require('path');
 const csv = require('csv-parser');
+const logger = require('../utils/logger');
 
+/**
+ * Busca materiais no arquivo CSV baseado no kit sugerido.
+ * 
+ * @param {string} kitSugerido - Nome do kit (ex: "CE2 BRAÇO J")
+ * @param {string|null} caminhoArquivo - Caminho customizado do CSV (para testes)
+ * @returns {Promise<Array>} Lista de materiais
+ * @throws {Error} Se o arquivo não existir ou houver erro de leitura
+ */
 const buscarMateriaisNoCSV = (kitSugerido, caminhoArquivo = null) => {
   return new Promise((resolve, reject) => {
     const resultados = [];
     let capturando = false;
+    let kitEncontrado = false; // Flag para rastrear se o kit foi localizado no CSV
     const caminhoCSV = caminhoArquivo || path.join(__dirname, '../data', 'RESUMO KITS MAIS USADOS.xlsx - ESTRUTURAS BRAÇO J.csv');
+
+    // Validação de entrada
+    if (!kitSugerido || typeof kitSugerido !== 'string') {
+      return reject(new Error("Nome do kit inválido."));
+    }
 
     // Check if file exists
     if (!fs.existsSync(caminhoCSV)) {
-      console.error(`CSV file not found at: ${caminhoCSV}`);
+      logger.error(`CSV file not found at: ${caminhoCSV}`);
       return reject(new Error("Banco de dados de materiais não encontrado."));
     }
 
@@ -26,11 +41,12 @@ const buscarMateriaisNoCSV = (kitSugerido, caminhoArquivo = null) => {
         // Início do Bloco
         if (colunaIdentificador === kitSugeridoNormalizado) {
           capturando = true;
+          kitEncontrado = true;
+          logger.info(`Kit encontrado no CSV: ${kitSugerido}`);
           return;
         }
 
         // Fim do Bloco: Encontrou outro header relevante (BRAÇO J) ou fim de estrutura
-        // Melhoria: Detectar se mudou de kit (qualquer texto na coluna 1 que pareça um título e não seja o atual)
         if (capturando && colunaIdentificador && colunaIdentificador !== kitSugeridoNormalizado && colunaIdentificador.includes('BRAÇO J')) {
           capturando = false;
         }
@@ -45,13 +61,21 @@ const buscarMateriaisNoCSV = (kitSugerido, caminhoArquivo = null) => {
         }
       })
       .on('end', () => {
-        if (resultados.length === 0) {
-          // Pode não ser um erro técnico, mas é um aviso de negócio
-          console.warn(`Nenhum material encontrado para o kit: ${kitSugerido}`);
+        // Distinção entre "kit não encontrado" e "kit vazio"
+        if (!kitEncontrado) {
+          logger.warn(`Kit não encontrado no CSV: ${kitSugerido}`);
+          return reject(new Error(`Kit "${kitSugerido}" não encontrado no banco de dados. Verifique o nome do kit.`));
         }
+
+        if (resultados.length === 0) {
+          // Kit foi encontrado, mas não tinha materiais (caso edge legítimo)
+          logger.warn(`Kit encontrado mas sem materiais: ${kitSugerido}`);
+        }
+
         resolve(resultados);
       })
       .on('error', (err) => {
+        logger.error(`Erro ao ler CSV: ${err.message}`);
         reject(new Error(`Erro ao ler arquivo CSV: ${err.message}`));
       });
   });

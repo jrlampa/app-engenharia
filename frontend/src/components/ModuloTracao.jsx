@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { gerarRelatorioTracao } from '../utils/exportPDF';
 
 const ModuloTracao = () => {
   const [dados, setDados] = useState({ vao: 40, pesoCabo: 0.5, tracaoInicial: 200 });
   const [resultado, setResultado] = useState(null);
-  const [erro, setErro] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const calcular = async () => {
-    setErro("");
+    setLoading(true);
     try {
       let data;
       // Verifica se está rodando no Electron via IPC
@@ -25,10 +26,17 @@ const ModuloTracao = () => {
         data = await response.json();
       }
 
-      if (data.sucesso) setResultado(data.resultado);
-      else setErro(data.error);
+      if (data.sucesso) {
+        setResultado(data.resultado);
+        toast.success('Cálculo realizado com sucesso!');
+      } else {
+        toast.error(data.error || 'Erro ao processar cálculo');
+      }
     } catch (err) {
-      setErro("Servidor offline. Verifique o backend.");
+      toast.error("Erro de comunicação com o servidor");
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -48,8 +56,19 @@ const ModuloTracao = () => {
           <label>Tração Inicial (daN):</label>
           <input type="number" value={dados.tracaoInicial} onChange={e => setDados({ ...dados, tracaoInicial: Number(e.target.value) })} />
 
-          <button onClick={calcular} style={{ padding: '10px', background: '#3498db', color: '#fff', border: 'none', cursor: 'pointer', borderRadius: '4px' }}>
-            Calcular Flecha
+          <button
+            onClick={calcular}
+            disabled={loading}
+            style={{
+              padding: '10px',
+              background: loading ? '#95a5a6' : '#3498db',
+              color: '#fff',
+              border: 'none',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              borderRadius: '4px'
+            }}
+          >
+            {loading ? 'Calculando...' : 'Calcular Flecha'}
           </button>
         </div>
 
@@ -102,7 +121,6 @@ const ModuloTracao = () => {
               </div>
             </div>
           )}
-          {erro && <p style={{ color: 'red' }}>{erro}</p>}
         </div>
       </div>
     </div>

@@ -20,9 +20,10 @@ describe('MaterialService Integration', () => {
     expect(materiais[0].codigo).toBe('2001');
   });
 
-  test('Deve retornar array vazio para kit inexistente', async () => {
-    const materiais = await buscarMateriaisNoCSV("KIT INEXISTENTE", mockDbPath);
-    expect(materiais.length).toBe(0);
+  test('Deve lançar erro para kit inexistente (não encontrado no CSV)', async () => {
+    await expect(buscarMateriaisNoCSV("KIT INEXISTENTE", mockDbPath))
+      .rejects
+      .toThrow('Kit "KIT INEXISTENTE" não encontrado no banco de dados');
   });
 
   test('Deve lançar erro se arquivo não existir', async () => {

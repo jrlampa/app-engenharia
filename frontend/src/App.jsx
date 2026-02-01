@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Activity, Zap } from 'lucide-react';
+import { Toaster } from 'react-hot-toast';
 import ModuloTracao from './components/ModuloTracao';
 import ModuloTensao from './components/ModuloTensao';
 
@@ -8,47 +9,68 @@ function App() {
 
   return (
     <div style={{ display: 'flex', height: '100vh', backgroundColor: '#f4f7f6' }}>
-      {/* Sidebar de Navegação */}
-      <div style={{ width: '200px', backgroundColor: '#2c3e50', color: '#fff', padding: '20px' }}>
-        <h2 style={{ fontSize: '1.2em', marginBottom: '30px' }}>Engenharia Pro</h2>
+      <Toaster position="top-right" />
 
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <button
-            onClick={() => setAbaAtiva('tracao')}
-            style={styleAba(abaAtiva === 'tracao')}>
-            <Activity size={18} /> Tração de Rede
-          </button>
+      {/* Sidebar */}
+      <div style={{
+        width: '220px',
+        background: 'linear-gradient(180deg, #2c3e50 0%, #34495e 100%)',
+        color: 'white',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '20px 0',
+        boxShadow: '2px 0 10px rgba(0,0,0,0.1)'
+      }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '30px', fontSize: '1.3em' }}>⚡ sisEngenharia</h2>
 
-          <button
-            onClick={() => setAbaAtiva('tensao')}
-            style={styleAba(abaAtiva === 'tensao')}>
-            <Zap size={18} /> Queda de Tensão
-          </button>
-        </nav>
+        <button
+          onClick={() => setAbaAtiva('tracao')}
+          style={{
+            background: abaAtiva === 'tracao' ? '#3498db' : 'transparent',
+            border: 'none',
+            color: 'white',
+            padding: '15px 20px',
+            cursor: 'pointer',
+            textAlign: 'left',
+            fontSize: '1em',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            transition: 'all 0.2s'
+          }}
+        >
+          <Activity size={20} />
+          Tração
+        </button>
+
+        <button
+          onClick={() => setAbaAtiva('tensao')}
+          style={{
+            background: abaAtiva === 'tensao' ? '#3498db' : 'transparent',
+            border: 'none',
+            color: 'white',
+            padding: '15px 20px',
+            cursor: 'pointer',
+            textAlign: 'left',
+            fontSize: '1em',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            transition: 'all 0.2s'
+          }}
+        >
+          <Zap size={20} />
+          Queda de Tensão
+        </button>
       </div>
 
-      {/* Área de Conteúdo */}
-      <div style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
+      {/* Main Content */}
+      <div style={{ flex: 1, overflowY: 'auto' }}>
         {abaAtiva === 'tracao' && <ModuloTracao />}
         {abaAtiva === 'tensao' && <ModuloTensao />}
       </div>
     </div>
   );
 }
-
-// Estilo auxiliar para as abas
-const styleAba = (ativa) => ({
-  display: 'flex',
-  alignItems: 'center',
-  gap: '10px',
-  padding: '12px',
-  backgroundColor: ativa ? '#34495e' : 'transparent',
-  border: 'none',
-  color: '#fff',
-  textAlign: 'left',
-  cursor: 'pointer',
-  borderRadius: '4px',
-  transition: '0.3s'
-});
 
 export default App;

@@ -1,1 +1,14 @@
 {"level":"info","message":"Backend modularizado rodando na porta 5000.","service":"app-engenharia-backend","timestamp":"2026-02-01 20:01:16"}
+{"level":"info","message":"Backend modularizado rodando na porta 5000.","service":"app-engenharia-backend","timestamp":"2026-02-01 20:09:06"}
+{"level":"info","message":"Kit encontrado no CSV: CE2 BRAÇO J","service":"app-engenharia-backend","timestamp":"2026-02-01 20:10:36"}
+{"level":"info","message":"Kit encontrado no CSV: CE3 BRAÇO J","service":"app-engenharia-backend","timestamp":"2026-02-01 20:10:36"}
+{"level":"warn","message":"Kit não encontrado no CSV: KIT INEXISTENTE","service":"app-engenharia-backend","timestamp":"2026-02-01 20:10:36"}
+{"level":"error","message":"CSV file not found at: ./caminho/falso.csv","service":"app-engenharia-backend","timestamp":"2026-02-01 20:10:36"}
+{"level":"info","message":"Kit encontrado no CSV: CE2 BRAÇO J","service":"app-engenharia-backend","timestamp":"2026-02-01 20:10:59"}
+{"level":"info","message":"Kit encontrado no CSV: CE3 BRAÇO J","service":"app-engenharia-backend","timestamp":"2026-02-01 20:10:59"}
+{"level":"warn","message":"Kit não encontrado no CSV: KIT INEXISTENTE","service":"app-engenharia-backend","timestamp":"2026-02-01 20:10:59"}
+{"level":"error","message":"CSV file not found at: ./caminho/falso.csv","service":"app-engenharia-backend","timestamp":"2026-02-01 20:10:59"}
+{"level":"info","message":"Backend modularizado rodando na porta 5000.","service":"app-engenharia-backend","timestamp":"2026-02-01 20:15:11"}
+{"level":"info","message":"Backend modularizado rodando na porta 5000.","service":"app-engenharia-backend","timestamp":"2026-02-01 20:18:21"}
+{"level":"info","message":"GET /api/tensao/cabos","service":"app-engenharia-backend","timestamp":"2026-02-01 20:18:35"}
+{"level":"info","message":"Tabela de cabos solicitada","service":"app-engenharia-backend","timestamp":"2026-02-01 20:18:35"}

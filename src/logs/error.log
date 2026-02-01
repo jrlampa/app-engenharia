@@ -1,0 +1,2 @@
+{"level":"error","message":"CSV file not found at: ./caminho/falso.csv","service":"app-engenharia-backend","timestamp":"2026-02-01 20:10:36"}
+{"level":"error","message":"CSV file not found at: ./caminho/falso.csv","service":"app-engenharia-backend","timestamp":"2026-02-01 20:10:59"}
