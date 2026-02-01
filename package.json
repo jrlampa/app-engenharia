@@ -1,23 +1,46 @@
 {
   "name": "app-engenharia",
   "version": "1.0.0",
-  "description": "",
+  "description": "Application for engineering calculations",
   "main": "src/electron/main.js",
   "scripts": {
-    "start": "electron .",
-    "dev:backend": "nodemon src/backend/server.js",
+    "electron": "electron src/electron/main.js",
+    "backend": "node src/backend/server.js",
+    "frontend": "npm run dev --prefix frontend",
+    "start": "concurrently \"npm run backend\" \"npm run frontend\" \"wait-on http://localhost:5173 && npm run electron\"",
+    "dist": "npm run build --prefix frontend && electron-builder",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "build": {
+    "appId": "com.engenharia.pro",
+    "productName": "Engenharia Pro - Tração e Tensão",
+    "directories": {
+      "output": "dist_electron"
+    },
+    "win": {
+      "target": "portable",
+      "icon": "public/icon.ico"
+    },
+    "files": [
+      "src/**/*",
+      "frontend/dist/**/*",
+      "package.json"
+    ]
+  },
   "keywords": [],
-  "author": "",
+  "author": "Engenharia Pro",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
     "cors": "^2.8.6",
+    "csv-parser": "^3.2.0",
     "electron": "^40.1.0",
     "express": "^5.2.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "concurrently": "^9.2.1",
+    "electron-builder": "^26.7.0",
+    "nodemon": "^3.1.11",
+    "wait-on": "^9.0.3"
   }
 }
