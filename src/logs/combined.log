@@ -12,3 +12,12 @@
 {"level":"info","message":"Backend modularizado rodando na porta 5000.","service":"app-engenharia-backend","timestamp":"2026-02-01 20:18:21"}
 {"level":"info","message":"GET /api/tensao/cabos","service":"app-engenharia-backend","timestamp":"2026-02-01 20:18:35"}
 {"level":"info","message":"Tabela de cabos solicitada","service":"app-engenharia-backend","timestamp":"2026-02-01 20:18:35"}
+{"level":"info","message":"Building materials index from: C:\\myworld\\sisL\\app-engenharia\\src\\backend\\data\\MOCK_DB.csv","service":"app-engenharia-backend","timestamp":"2026-02-01 20:24:48"}
+{"level":"info","message":"Materials index built: 2 kits, 5 total materials","service":"app-engenharia-backend","timestamp":"2026-02-01 20:24:49"}
+{"level":"info","message":"Warming up materials cache...","service":"app-engenharia-backend","timestamp":"2026-02-01 20:25:02"}
+{"level":"info","message":"Building materials index from: C:\\myworld\\sisL\\app-engenharia\\src\\backend\\data\\RESUMO KITS MAIS USADOS.xlsx - ESTRUTURAS BRAÇO J.csv","service":"app-engenharia-backend","timestamp":"2026-02-01 20:25:02"}
+{"level":"info","message":"Materials index built: 2 kits, 6 total materials","service":"app-engenharia-backend","timestamp":"2026-02-01 20:25:02"}
+{"level":"info","message":"Materials cache initialized successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 20:25:02"}
+{"level":"info","message":"Backend modularizado rodando na porta 5000 (cache ativo).","service":"app-engenharia-backend","timestamp":"2026-02-01 20:25:02"}
+{"level":"info","message":"Building materials index from: C:\\myworld\\sisL\\app-engenharia\\src\\backend\\data\\MOCK_DB.csv","service":"app-engenharia-backend","timestamp":"2026-02-01 20:25:07"}
+{"level":"info","message":"Materials index built: 2 kits, 5 total materials","service":"app-engenharia-backend","timestamp":"2026-02-01 20:25:07"}

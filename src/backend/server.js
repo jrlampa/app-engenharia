@@ -8,6 +8,9 @@ const tracaoRoutes = require('./routes/tracaoRoutes');
 const tensaoRoutes = require('./routes/tensaoRoutes');
 const cabosRoutes = require('./routes/cabosRoutes');
 
+// Services (para cache warmup)
+const { initializeMaterialsCache } = require('./services/MaterialService');
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -29,4 +32,17 @@ app.use('/api', tracaoRoutes);
 app.use('/api', tensaoRoutes);
 app.use('/api', cabosRoutes);
 
-app.listen(5000, () => logger.info("Backend modularizado rodando na porta 5000."));
+// Inicialização assíncrona do servidor
+(async () => {
+  try {
+    // Warmup: Constrói o índice de materiais antes de aceitar requisições
+    logger.info('Warming up materials cache...');
+    await initializeMaterialsCache();
+
+    // Inicia o servidor
+    app.listen(5000, () => logger.info("Backend modularizado rodando na porta 5000 (cache ativo)."));
+  } catch (error) {
+    logger.error('Failed to start server', { error: error.message });
+    process.exit(1);
+  }
+})();
