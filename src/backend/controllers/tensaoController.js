@@ -1,5 +1,6 @@
 const { calcularQuedaTensao } = require('../services/CalculationService');
-const { saveCalculoTensao } = require('../services/HistoryService');
+const HistoryService = require('../services/HistoryService');
+
 const logger = require('../utils/logger');
 const asyncHandler = require('../utils/asyncHandler');
 
@@ -15,7 +16,8 @@ const calcularTensaoController = asyncHandler(async (req, res) => {
 
   // Persistência delegada para o HistoryService
   try {
-    saveCalculoTensao(projectId, req.body, resultado);
+    HistoryService.salvarCalculo('TENSAO', req.body, resultado, projectId);
+
   } catch (dbError) {
     logger.warn('Failed to save calculation to database', { error: dbError.message });
   }

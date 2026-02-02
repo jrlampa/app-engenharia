@@ -81,15 +81,21 @@ const initializeDatabase = () => {
     `);
 
 
-    // Create sync_metadata table
+    // Create historico_calculos table (v0.2.4)
     sqlite.exec(`
-      CREATE TABLE IF NOT EXISTS sync_metadata (
-        key TEXT PRIMARY KEY,
-        value TEXT NOT NULL
+      CREATE TABLE IF NOT EXISTS historico_calculos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        project_id INTEGER,
+        tipo TEXT NOT NULL,
+        data_execucao TEXT DEFAULT CURRENT_TIMESTAMP,
+        inputs TEXT NOT NULL,
+        resultados TEXT NOT NULL,
+        FOREIGN KEY (project_id) REFERENCES projects(id)
       )
     `);
 
     logger.info('Database tables created/verified successfully');
+
 
   } catch (error) {
     logger.error('Failed to initialize database', { error: error.message });

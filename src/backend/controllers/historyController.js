@@ -1,9 +1,5 @@
-const {
-  createProject,
-  listAllProjects,
-  getProjectHistory,
-  getRecentCalculations
-} = require('../services/HistoryService');
+const HistoryService = require('../services/HistoryService');
+
 const logger = require('../utils/logger');
 const asyncHandler = require('../utils/asyncHandler');
 
@@ -11,7 +7,7 @@ const asyncHandler = require('../utils/asyncHandler');
  * Controller para listar projetos.
  */
 const listarProjetosController = asyncHandler(async (req, res) => {
-  const projects = listAllProjects();
+  const projects = await HistoryService.listAllProjects();
   res.json({ sucesso: true, projects });
 });
 
@@ -27,7 +23,7 @@ const criarProjetoController = asyncHandler(async (req, res) => {
     throw error;
   }
 
-  const projectId = createProject(name, description, client, location);
+  const projectId = await HistoryService.createProject(name, description, client, location);
 
   res.json({
     sucesso: true,
@@ -48,7 +44,8 @@ const obterHistoricoProjetoController = asyncHandler(async (req, res) => {
     throw error;
   }
 
-  const history = getProjectHistory(projectId);
+  // Agora busca do histórico unificado (v0.2.4)
+  const history = await HistoryService.listarPorProjeto(projectId);
   res.json({ sucesso: true, history });
 });
 
@@ -56,10 +53,11 @@ const obterHistoricoProjetoController = asyncHandler(async (req, res) => {
  * Controller para listar cálculos recentes.
  */
 const listarCalculosRecentesController = asyncHandler(async (req, res) => {
-  const limit = parseInt(req.query.limit) || 20;
-  const calculations = getRecentCalculations(limit);
+  // Agora lista do histórico unificado (v0.2.4)
+  const calculations = await HistoryService.listarHistorico();
   res.json({ sucesso: true, calculations });
 });
+
 
 module.exports = {
   listarProjetosController,

@@ -1,7 +1,8 @@
 const { calcularTracao: calcularFlecha } = require('../services/CalculationService');
 const { MaterialService } = require('../services/MaterialService');
 
-const { saveCalculoTracao } = require('../services/HistoryService');
+const HistoryService = require('../services/HistoryService');
+
 const logger = require('../utils/logger');
 const asyncHandler = require('../utils/asyncHandler');
 
@@ -30,7 +31,8 @@ const calcularTracaoController = asyncHandler(async (req, res) => {
 
   // 3. Persistência (History Service - Non-blocking)
   try {
-    saveCalculoTracao(projectId, req.body, resultadoFinal);
+    HistoryService.salvarCalculo('TRACAO', req.body, resultadoFinal, projectId);
+
   } catch (dbError) {
     logger.warn('History persistence failed, but calculation succeeded', { error: dbError.message });
   }

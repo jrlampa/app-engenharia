@@ -38,6 +38,18 @@ const calculosTensao = sqliteTable('calculos_tensao', {
   timestamp: text('timestamp').default(sql`CURRENT_TIMESTAMP`)
 });
 
+// Tabela unificada de Histórico (v0.2.4)
+const historicoCalculos = sqliteTable('historico_calculos', {
+
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  projectId: integer('project_id').references(() => projects.id),
+  tipo: text('tipo').notNull(),            // 'TRACAO' ou 'TENSAO'
+  data_execucao: text('data_execucao').default(sql`CURRENT_TIMESTAMP`),
+  inputs: text('inputs').notNull(),        // JSON Serialized
+  resultados: text('resultados').notNull() // JSON Serialized
+});
+
+
 /**
  * DOCUMENTAÇÃO: Schema de Materiais.
  * Armazena a estrutura dos kits extraída do CSV para consultas relacionais.
@@ -57,5 +69,5 @@ const syncMetadata = sqliteTable('sync_metadata', {
   value: text('value').notNull()
 });
 
-module.exports = { projects, calculosTracao, calculosTensao, materiais, syncMetadata };
+module.exports = { projects, calculosTracao, calculosTensao, materiais, syncMetadata, historicoCalculos };
 
