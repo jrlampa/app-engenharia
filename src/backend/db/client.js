@@ -70,7 +70,8 @@ const initializeDatabase = () => {
 };
 
 
-// Auto-initialize on import
-initializeDatabase();
+// Don't auto-initialize on import anymore
+// initializeDatabase();
 
-module.exports = { db, sqlite };
+module.exports = { db, sqlite, initializeDatabase };
+

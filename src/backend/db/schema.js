@@ -42,12 +42,13 @@ const calculosTensao = sqliteTable('calculos_tensao', {
 const historicoCalculos = sqliteTable('historico_calculos', {
 
   id: integer('id').primaryKey({ autoIncrement: true }),
-  projectId: integer('project_id').references(() => projects.id),
+  projectId: integer('project_id').references(() => projects.id, { onDelete: 'cascade' }),
   tipo: text('tipo').notNull(),            // 'TRACAO' ou 'TENSAO'
   data_execucao: text('data_execucao').default(sql`CURRENT_TIMESTAMP`),
   inputs: text('inputs').notNull(),        // JSON Serialized
   resultados: text('resultados').notNull() // JSON Serialized
 });
+
 
 
 /**

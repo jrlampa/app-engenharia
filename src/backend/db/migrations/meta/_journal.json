@@ -8,6 +8,13 @@
       "when": 1770001249141,
       "tag": "0000_rare_centennial",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1770002760641,
+      "tag": "0001_talented_captain_marvel",
+      "breakpoints": true
     }
   ]
 }
