@@ -8,6 +8,8 @@ const tracaoRoutes = require('./routes/tracaoRoutes');
 const tensaoRoutes = require('./routes/tensaoRoutes');
 const cabosRoutes = require('./routes/cabosRoutes');
 const historyRoutes = require('./routes/historyRoutes');
+const historicoRoutes = require('./routes/historicoRoutes');
+
 const errorHandler = require('./middleware/errorHandler');
 const performanceLogger = require('./middleware/performanceLogger');
 
@@ -32,6 +34,8 @@ app.use('/api', tracaoRoutes);
 app.use('/api', tensaoRoutes);
 app.use('/api', cabosRoutes);
 app.use('/api', historyRoutes);
+app.use('/api/historico', historicoRoutes);
+
 
 // --- ERROR HANDLER (Deve ser o último) ---
 app.use(errorHandler);
