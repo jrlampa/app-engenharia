@@ -12,7 +12,8 @@ const errorHandler = require('./middleware/errorHandler');
 const performanceLogger = require('./middleware/performanceLogger');
 
 // Services (para cache warmup)
-const { initializeMaterialsCache } = require('./services/MaterialService');
+const { MaterialService } = require('./services/MaterialService');
+
 
 const app = express();
 app.use(cors());
@@ -45,7 +46,8 @@ async function startServer() {
     require('./db/client');
 
     // 2. Sincroniza CSV com SQLite no boot (Garante integridade antes de aceitar conexões)
-    await initializeMaterialsCache();
+    await MaterialService.initializeMaterialsCache();
+
 
     app.listen(5000, () => {
       logger.info("Backend de Engenharia v0.2.4 operando na porta 5000");

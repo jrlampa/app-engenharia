@@ -1,5 +1,6 @@
 const { calcularTracao: calcularFlecha } = require('../services/CalculationService');
-const { buscarMateriaisNoCSV } = require('../services/MaterialService');
+const { MaterialService } = require('../services/MaterialService');
+
 const { saveCalculoTracao } = require('../services/HistoryService');
 const logger = require('../utils/logger');
 const asyncHandler = require('../utils/asyncHandler');
@@ -21,8 +22,9 @@ const calcularTracaoController = asyncHandler(async (req, res) => {
   // 1. Cálculo (Service Layer)
   const resultadoCalculo = calcularFlecha(vao, pesoCabo, tracaoInicial);
 
-  // 2. Busca de Materiais (Cache Indexado/SQLite)
-  const materiais = await buscarMateriaisNoCSV(resultadoCalculo.sugestao);
+  // 2. Busca de Materiais (Drizzle ORM / SQLite)
+  const materiais = await MaterialService.getMaterialsForKit(resultadoCalculo.sugestao);
+
 
   const resultadoFinal = { ...resultadoCalculo, materiais };
 
