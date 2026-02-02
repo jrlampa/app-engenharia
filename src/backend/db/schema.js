@@ -38,14 +38,18 @@ const calculosTensao = sqliteTable('calculos_tensao', {
   timestamp: text('timestamp').default(sql`CURRENT_TIMESTAMP`)
 });
 
-// Materiais (CSV Cache) table
+/**
+ * DOCUMENTAÇÃO: Schema de Materiais.
+ * Armazena a estrutura dos kits extraída do CSV para consultas relacionais.
+ */
 const materiais = sqliteTable('materiais', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  kitName: text('kit_name').notNull(),
-  codigo: text('codigo').notNull(),
-  item: text('item').notNull(),
-  qtd: text('qtd').notNull()
+  kit_nome: text('kit_nome').notNull(), // Ex: CE2 BRAÇO J
+  codigo: text('codigo').notNull(),     // Ex: F-4/13
+  item: text('item').notNull(),         // Descrição do material
+  quantidade: real('quantidade').notNull() // Quantidade para o kit
 });
+
 
 // Sync Metadata table
 const syncMetadata = sqliteTable('sync_metadata', {

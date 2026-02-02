@@ -223,3 +223,110 @@
 {"env":"development","level":"info","message":"Database is already up to date with all CSV files (stable state).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:52:45"}
 {"env":"development","level":"info","message":"Started watching data directory for CSV changes: data","service":"app-engenharia-backend","timestamp":"2026-02-01 21:52:45"}
 {"env":"development","level":"info","message":"Backend modularizado rodando na porta 5000 (cache ativo).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:52:45"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:04"}
+{"env":"development","level":"info","message":"Initializing database...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:04"}
+{"env":"development","level":"info","message":"Warming up materials cache...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:04"}
+{"env":"development","level":"info","message":"Database is already up to date with all CSV files (stable state).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:04"}
+{"env":"development","level":"info","message":"Started watching data directory for CSV changes: data","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:04"}
+{"env":"development","level":"info","message":"Backend modularizado rodando na porta 5000 (cache ativo).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:04"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:04"}
+{"env":"development","level":"info","message":"Initializing database...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:04"}
+{"env":"development","level":"info","message":"Warming up materials cache...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:04"}
+{"env":"development","level":"info","message":"Database is already up to date with all CSV files (stable state).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:04"}
+{"env":"development","level":"info","message":"Started watching data directory for CSV changes: data","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:04"}
+{"env":"development","level":"info","message":"Backend modularizado rodando na porta 5000 (cache ativo).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:04"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:07"}
+{"env":"development","level":"info","message":"Initializing database...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:07"}
+{"env":"development","level":"info","message":"Warming up materials cache...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:07"}
+{"env":"development","level":"info","message":"Database is already up to date with all CSV files (stable state).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:07"}
+{"env":"development","level":"info","message":"Started watching data directory for CSV changes: data","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:07"}
+{"env":"development","level":"info","message":"Backend modularizado rodando na porta 5000 (cache ativo).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:07"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:07"}
+{"env":"development","level":"info","message":"Initializing database...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:07"}
+{"env":"development","level":"info","message":"Warming up materials cache...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:07"}
+{"env":"development","level":"info","message":"Database is already up to date with all CSV files (stable state).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:07"}
+{"env":"development","level":"info","message":"Started watching data directory for CSV changes: data","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:07"}
+{"env":"development","level":"info","message":"Backend modularizado rodando na porta 5000 (cache ativo).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:07"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:09"}
+{"env":"development","level":"info","message":"Initializing database...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:09"}
+{"env":"development","level":"info","message":"Warming up materials cache...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:09"}
+{"env":"development","level":"info","message":"Database is already up to date with all CSV files (stable state).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:09"}
+{"env":"development","level":"info","message":"Started watching data directory for CSV changes: data","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:09"}
+{"env":"development","level":"info","message":"Backend modularizado rodando na porta 5000 (cache ativo).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:09"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:09"}
+{"env":"development","level":"info","message":"Initializing database...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:09"}
+{"env":"development","level":"info","message":"Warming up materials cache...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:09"}
+{"env":"development","level":"info","message":"Database is already up to date with all CSV files (stable state).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:09"}
+{"env":"development","level":"info","message":"Started watching data directory for CSV changes: data","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:09"}
+{"env":"development","level":"info","message":"Backend modularizado rodando na porta 5000 (cache ativo).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:09"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:17"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:18"}
+{"env":"development","level":"info","message":"Initializing database...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:18"}
+{"env":"development","level":"info","message":"Warming up materials cache...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:18"}
+{"env":"development","level":"info","message":"Database is already up to date with all CSV files (stable state).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:18"}
+{"env":"development","level":"info","message":"Started watching data directory for CSV changes: data","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:18"}
+{"env":"development","level":"info","message":"Backend modularizado rodando na porta 5000 (cache ativo).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:18"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:37"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:48"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:48"}
+{"env":"development","level":"info","message":"Initializing database...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:48"}
+{"env":"development","level":"info","message":"Warming up materials cache...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:48"}
+{"env":"development","level":"info","message":"Changes detected in CSV directory. Starting full re-sync...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:48"}
+{"env":"development","level":"debug","message":"Parsing MOCK_DB.csv...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:48"}
+{"env":"development","level":"debug","message":"Parsing RESUMO KITS MAIS USADOS.xlsx - ESTRUTURAS BRAÇO J.csv...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:48"}
+{"env":"development","error":"table materiais has no column named kit_nome","level":"error","message":"Failed to perform intelligent database sync","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:48"}
+{"env":"development","error":"table materiais has no column named kit_nome","level":"error","message":"Intelligent sync failed","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:48"}
+{"env":"development","level":"info","message":"Started watching data directory for CSV changes: data","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:48"}
+{"env":"development","level":"info","message":"Backend modularizado rodando na porta 5000 (cache ativo).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:55:48"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:00"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Initializing database...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Warming up materials cache...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Changes detected in CSV directory. Starting full re-sync...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"debug","message":"Parsing MOCK_DB.csv...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Initializing database...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Warming up materials cache...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Changes detected in CSV directory. Starting full re-sync...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"debug","message":"Parsing MOCK_DB.csv...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"debug","message":"Parsing RESUMO KITS MAIS USADOS.xlsx - ESTRUTURAS BRAÇO J.csv...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"debug","message":"Parsing RESUMO KITS MAIS USADOS.xlsx - ESTRUTURAS BRAÇO J.csv...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","error":"table materiais has no column named kit_nome","level":"error","message":"Failed to perform intelligent database sync","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","error":"table materiais has no column named kit_nome","level":"error","message":"Failed to perform intelligent database sync","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","error":"table materiais has no column named kit_nome","level":"error","message":"Intelligent sync failed","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Started watching data directory for CSV changes: data","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Backend modularizado rodando na porta 5000 (cache ativo).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","error":"table materiais has no column named kit_nome","level":"error","message":"Intelligent sync failed","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Started watching data directory for CSV changes: data","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Backend modularizado rodando na porta 5000 (cache ativo).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Initializing database...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Warming up materials cache...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Changes detected in CSV directory. Starting full re-sync...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"debug","message":"Parsing MOCK_DB.csv...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"debug","message":"Parsing RESUMO KITS MAIS USADOS.xlsx - ESTRUTURAS BRAÇO J.csv...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","error":"table materiais has no column named kit_nome","level":"error","message":"Failed to perform intelligent database sync","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","error":"table materiais has no column named kit_nome","level":"error","message":"Intelligent sync failed","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Started watching data directory for CSV changes: data","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Backend modularizado rodando na porta 5000 (cache ativo).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Initializing database...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Warming up materials cache...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Changes detected in CSV directory. Starting full re-sync...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"debug","message":"Parsing MOCK_DB.csv...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"debug","message":"Parsing RESUMO KITS MAIS USADOS.xlsx - ESTRUTURAS BRAÇO J.csv...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","error":"table materiais has no column named kit_nome","level":"error","message":"Failed to perform intelligent database sync","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","error":"table materiais has no column named kit_nome","level":"error","message":"Intelligent sync failed","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Started watching data directory for CSV changes: data","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Backend modularizado rodando na porta 5000 (cache ativo).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:26"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:27"}
+{"env":"development","level":"info","message":"Initializing database...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:27"}
+{"env":"development","level":"info","message":"Warming up materials cache...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:27"}
+{"env":"development","level":"info","message":"Changes detected in CSV directory. Starting full re-sync...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:27"}
+{"env":"development","level":"debug","message":"Parsing MOCK_DB.csv...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:27"}
+{"env":"development","level":"debug","message":"Parsing RESUMO KITS MAIS USADOS.xlsx - ESTRUTURAS BRAÇO J.csv...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:27"}
+{"env":"development","level":"info","message":"Intelligent sync complete. Database rebuilt from 2 CSV files.","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:27"}
+{"env":"development","level":"info","message":"Started watching data directory for CSV changes: data","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:27"}
+{"env":"development","level":"info","message":"Backend modularizado rodando na porta 5000 (cache ativo).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:27"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:42"}

@@ -50,18 +50,21 @@ const syncDatabase = async () => {
 
     // Inserção atômica em transação
     const deleteStmt = sqlite.prepare('DELETE FROM materiais');
-    const insertStmt = sqlite.prepare('INSERT INTO materiais (kit_name, codigo, item, qtd) VALUES (?, ?, ?, ?)');
+    const insertStmt = sqlite.prepare('INSERT INTO materiais (kit_nome, codigo, item, quantidade) VALUES (?, ?, ?, ?)');
     const upsertMetadata = sqlite.prepare('INSERT OR REPLACE INTO sync_metadata (key, value) VALUES (?, ?)');
 
     const transaction = sqlite.transaction((data) => {
       deleteStmt.run();
       for (const kitName in data) {
         for (const material of data[kitName]) {
-          insertStmt.run(kitName, material.codigo, material.item, material.qtd);
+          // Garante que a quantidade seja um número para o banco (coluna REAL)
+          const qtdNum = parseFloat(material.qtd.replace(',', '.')) || 0;
+          insertStmt.run(kitName, material.codigo, material.item, qtdNum);
         }
       }
       upsertMetadata.run('global_csv_state', stateHash);
     });
+
 
     transaction(allMaterials);
     logger.info(`Intelligent sync complete. Database rebuilt from ${files.length} CSV files.`);

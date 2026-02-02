@@ -58,7 +58,7 @@ const buscarMateriaisNoCSV = async (kitSugerido) => {
 
   const kitNormalizado = kitSugerido.trim();
 
-  const materiais = sqlite.prepare('SELECT codigo, item, qtd FROM materiais WHERE kit_name = ?')
+  const materiais = sqlite.prepare('SELECT codigo, item, quantidade FROM materiais WHERE kit_nome = ?')
     .all(kitNormalizado);
 
   if (!materiais || materiais.length === 0) {
@@ -74,8 +74,8 @@ const buscarMateriaisNoCSV = async (kitSugerido) => {
  */
 const getAvailableKits = () => {
   try {
-    const rows = sqlite.prepare('SELECT DISTINCT kit_name FROM materiais ORDER BY kit_name ASC').all();
-    return rows.map(r => r.kit_name);
+    const rows = sqlite.prepare('SELECT DISTINCT kit_nome FROM materiais ORDER BY kit_nome ASC').all();
+    return rows.map(r => r.kit_nome);
   } catch (error) {
     logger.error('Error listing kits from DB', { error: error.message });
     return [];

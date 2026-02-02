@@ -73,12 +73,13 @@ const initializeDatabase = () => {
     sqlite.exec(`
       CREATE TABLE IF NOT EXISTS materiais (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        kit_name TEXT NOT NULL,
+        kit_nome TEXT NOT NULL,
         codigo TEXT NOT NULL,
         item TEXT NOT NULL,
-        qtd TEXT NOT NULL
+        quantidade REAL NOT NULL
       )
     `);
+
 
     // Create sync_metadata table
     sqlite.exec(`
