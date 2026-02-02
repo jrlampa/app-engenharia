@@ -1,4 +1,4 @@
-const { calcularQuedaTensao } = require('../services/calcService');
+const { calcularQuedaTensao } = require('../services/CalculationService');
 const { saveCalculoTensao } = require('../services/HistoryService');
 const logger = require('../utils/logger');
 const asyncHandler = require('../utils/asyncHandler');

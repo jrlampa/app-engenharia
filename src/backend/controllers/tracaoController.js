@@ -1,4 +1,4 @@
-const { calcularTracao } = require('../services/calcService');
+const { calcularTracao } = require('../services/CalculationService');
 const { buscarMateriaisNoCSV } = require('../services/MaterialService');
 const { saveCalculoTracao } = require('../services/HistoryService');
 const logger = require('../utils/logger');
