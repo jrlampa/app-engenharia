@@ -14,13 +14,10 @@ const calcularTensaoController = asyncHandler(async (req, res) => {
   // Lógica de cálculo delegada para o Service
   const resultado = calcularQuedaTensao(tensaoNominal, corrente, comprimento, resistenciaKm);
 
-  // Persistência delegada para o HistoryService
-  try {
-    HistoryService.salvarCalculo('TENSAO', req.body, resultado, projectId);
+  // 3. Persistência em background (não bloqueia a resposta ao utilizador)
+  HistoryService.salvarCalculo('TENSAO', req.body, resultado, projectId)
+    .catch(err => logger.error(`Erro ao salvar histórico em background: ${err.message}`));
 
-  } catch (dbError) {
-    logger.warn('Failed to save calculation to database', { error: dbError.message });
-  }
 
   logger.info("Cálculo de queda de tensão realizado", resultado);
 

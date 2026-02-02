@@ -29,13 +29,10 @@ const calcularTracaoController = asyncHandler(async (req, res) => {
 
   const resultadoFinal = { ...resultadoCalculo, materiais };
 
-  // 3. Persistência (History Service - Non-blocking)
-  try {
-    HistoryService.salvarCalculo('TRACAO', req.body, resultadoFinal, projectId);
+  // 3. Persistência em background (não bloqueia a resposta ao utilizador)
+  HistoryService.salvarCalculo('TRACAO', req.body, resultadoFinal, projectId)
+    .catch(err => logger.error(`Erro ao salvar histórico em background: ${err.message}`));
 
-  } catch (dbError) {
-    logger.warn('History persistence failed, but calculation succeeded', { error: dbError.message });
-  }
 
   // 4. Auditoria de Performance e Log
   logger.info(`Cálculo de tração realizado: Vão ${vao}m, Sugestão: ${resultadoCalculo.sugestao}`);
