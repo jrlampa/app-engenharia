@@ -37,6 +37,7 @@
     "csv-parser": "^3.2.0",
     "drizzle-orm": "^0.45.1",
     "electron": "^40.1.0",
+    "exceljs": "^4.4.0",
     "express": "^5.2.1",
     "winston": "^3.19.0",
     "zod": "^4.3.6"
