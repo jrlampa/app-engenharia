@@ -1,27 +1,54 @@
+const fs = require('fs');
+const path = require('path');
 const { sqlite } = require('../db/client');
 const { syncMaterialsFromCSV } = require('./MaterialSyncService');
 const logger = require('../utils/logger');
 
+const CSV_PATH = path.join(__dirname, '../data', 'RESUMO KITS MAIS USADOS.xlsx - ESTRUTURAS BRAÇO J.csv');
+
 /**
- * Inicializa o cache de materiais (chamado na startup do servidor).
- * Delega a sincronização para o MaterialSyncService.
- * 
- * @param {string|null} caminhoArquivo - Caminho customizado do CSV (para testes)
+ * Encapsula a lógica de sincronização com o banco.
  */
-const initializeMaterialsCache = async (caminhoArquivo = null) => {
+const syncMaterialsWithDB = async (caminho = null) => {
   try {
-    await syncMaterialsFromCSV(caminhoArquivo);
+    await syncMaterialsFromCSV(caminho || CSV_PATH);
+    logger.info('Dynamic sync performed successfully');
   } catch (error) {
-    logger.error('Failed to initialize materials cache in DB', { error: error.message });
+    logger.error('Dynamic sync failed', { error: error.message });
+  }
+};
+
+/**
+ * Inicializa o cache de materiais e configura o monitoramento do CSV.
+ */
+const initializeMaterialsCache = async () => {
+  try {
+    // Sync inicial
+    await syncMaterialsWithDB();
+
+    // Configura Watcher para mudanças dinâmicas
+    if (fs.existsSync(CSV_PATH)) {
+      let timeout;
+      fs.watch(CSV_PATH, (eventType) => {
+        if (eventType === 'change') {
+          // Debounce de 1 segundo para evitar múltiplas leituras durante gravação
+          clearTimeout(timeout);
+          timeout = setTimeout(async () => {
+            logger.info('CSV change detected, triggering sync...');
+            await syncMaterialsWithDB();
+          }, 1000);
+        }
+      });
+      logger.info(`Started watching CSV for changes: ${path.basename(CSV_PATH)}`);
+    }
+  } catch (error) {
+    logger.error('Failed to initialize materials cache with watcher', { error: error.message });
     throw error;
   }
 };
 
 /**
  * Busca materiais no banco de dados SQLite.
- * 
- * @param {string} kitSugerido - Nome do kit (ex: "CE2 BRAÇO J")
- * @returns {Promise<Array>} Lista de materiais
  */
 const buscarMateriaisNoCSV = async (kitSugerido) => {
   if (!kitSugerido || typeof kitSugerido !== 'string') {
@@ -30,26 +57,19 @@ const buscarMateriaisNoCSV = async (kitSugerido) => {
 
   const kitNormalizado = kitSugerido.trim();
 
-  try {
-    const materiais = sqlite.prepare('SELECT codigo, item, qtd FROM materiais WHERE kit_name = ?')
-      .all(kitNormalizado);
+  const materiais = sqlite.prepare('SELECT codigo, item, qtd FROM materiais WHERE kit_name = ?')
+    .all(kitNormalizado);
 
-    if (!materiais || materiais.length === 0) {
-      logger.warn(`Kit not found in DB: ${kitSugerido}`);
-      throw new Error(`Kit "${kitSugerido}" não encontrado no banco de dados. Verifique o nome do kit.`);
-    }
-
-    return materiais;
-  } catch (error) {
-    logger.error('Error fetching materials from DB', { error: error.message, kit: kitSugerido });
-    throw error;
+  if (!materiais || materiais.length === 0) {
+    logger.warn(`Kit not found in DB: ${kitSugerido}`);
+    throw new Error(`Kit "${kitSugerido}" não encontrado. Verifique se o CSV está atualizado.`);
   }
+
+  return materiais;
 };
 
 /**
  * Retorna todos os kits disponíveis no banco de dados.
- * 
- * @returns {Array<string>} Lista de nomes de kits
  */
 const getAvailableKits = () => {
   try {
@@ -64,6 +84,8 @@ const getAvailableKits = () => {
 module.exports = {
   buscarMateriaisNoCSV,
   initializeMaterialsCache,
+  syncMaterialsWithDB,
   getAvailableKits
 };
+
 
