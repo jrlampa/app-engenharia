@@ -1,37 +1,68 @@
-const ExportService = require('../services/ExportService');
-const AnalyticsService = require('../services/AnalyticsService');
-const asyncHandler = require('../utils/asyncHandler');
+const PdfService = require('../services/PdfService');
+
+// ...
 
 /**
- * Download do arquivo Excel do projeto.
- * GET /api/projects/:id/export/excel
+ * Download do arquivo PDF do projeto.
+ * GET /api/projects/:id/export/pdf
  */
-const downloadExcel = asyncHandler(async (req, res) => {
+const downloadPdf = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   // Gerar o buffer
-  const buffer = await ExportService.generateProjectExcel(parseInt(id));
+  const buffer = await PdfService.generateProjectPdf(parseInt(id));
 
   // Configurar headers para download
-  res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-  res.setHeader('Content-Disposition', `attachment; filename=Project_${id}_Report.xlsx`);
+  const asyncHandler = require('../utils/asyncHandler');
 
-  res.send(buffer);
-});
+  /**
+   * Download do arquivo Excel do projeto.
+   * GET /api/projects/:id/export/excel
+   */
+  const downloadExcel = asyncHandler(async (req, res) => {
+    const { id } = req.params;
 
-/**
- * Retorna dados de inteligência do projeto.
- * GET /api/projects/:id/analytics
- */
-const getProjectAnalytics = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+    // Gerar o buffer
+    const buffer = await ExportService.generateProjectExcel(parseInt(id));
 
-  const kpis = await AnalyticsService.getProjectKPIs(parseInt(id));
+    // Configurar headers para download
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename=Project_${id}_Report.xlsx`);
 
-  res.json({
-    sucesso: true,
-    analytics: kpis
+    res.send(buffer);
   });
-});
 
-module.exports = { downloadExcel, getProjectAnalytics };
+  /**
+   * Download do arquivo PDF do projeto.
+   * GET /api/projects/:id/export/pdf
+   */
+  const downloadPdf = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    // Gerar o buffer
+    const buffer = await PdfService.generateProjectPdf(parseInt(id));
+
+    // Configurar headers para download
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=Project_${id}_Report.pdf`);
+
+    res.send(buffer);
+  });
+
+  /**
+   * Retorna dados de inteligência do projeto.
+   * GET /api/projects/:id/analytics
+   */
+  const getProjectAnalytics = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    const kpis = await AnalyticsService.getProjectKPIs(parseInt(id));
+
+    res.json({
+      sucesso: true,
+      analytics: kpis
+    });
+  });
+
+  module.exports = { downloadExcel, getProjectAnalytics, downloadPdf };
+  ```

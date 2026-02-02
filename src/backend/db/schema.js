@@ -70,6 +70,17 @@ const metadadosSync = sqliteTable('metadados_sync', {
   valor: text('valor').notNull()
 });
 
-module.exports = { projects, calculosTracao, calculosTensao, materiais, metadadosSync, historicoCalculos };
+// Configurações do Sistema (v0.3.2 - Singleton)
+const settings = sqliteTable('settings', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  empresaNome: text('empresa_nome').default('Minha Empresa de Engenharia'),
+  empresaLogo: text('empresa_logo'), // Caminho local ou URL
+  corPrimaria: text('cor_primaria').default('#007bff'),
+  engenheiroResponsavel: text('engenheiro_responsavel').default('Engenheiro Chefe'),
+  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`)
+});
+
+module.exports = { projects, calculosTracao, calculosTensao, materiais, metadadosSync, historicoCalculos, settings };
+
 
 
