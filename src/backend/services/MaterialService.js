@@ -1,52 +1,38 @@
 const fs = require('fs');
 const path = require('path');
 const { sqlite } = require('../db/client');
-const { syncDatabase } = require('./SyncService');
+const SyncService = require('./SyncService');
 const logger = require('../utils/logger');
 
 const DATA_DIR = path.join(__dirname, '../data');
-
-/**
- * Encapsula a lógica de sincronização com o banco.
- * De agora em diante, sincroniza a pasta inteira.
- */
-const syncMaterialsWithDB = async () => {
-  try {
-    await syncDatabase();
-  } catch (error) {
-    logger.error('Intelligent sync failed', { error: error.message });
-  }
-};
 
 /**
  * Inicializa o cache de materiais e configura o monitoramento da pasta data.
  */
 const initializeMaterialsCache = async () => {
   try {
-    // Sync inicial (inteligente: só faz se houver mudanças)
-    await syncMaterialsWithDB();
+    // Sincroniza no boot (inteligente: baseado no hash mtime)
+    await SyncService.syncMaterialsWithDB();
 
     // Configura Watcher para mudanças dinâmicas na PASTA inteira
     if (fs.existsSync(DATA_DIR)) {
       let timeout;
       fs.watch(DATA_DIR, (eventType, filename) => {
-        // Ignora mudanças em arquivos que não sejam CSV (como o calculations.db)
         if (filename && filename.endsWith('.csv')) {
           clearTimeout(timeout);
           timeout = setTimeout(async () => {
-            logger.info(`Change detected in ${filename}, triggering intelligent sync...`);
-            await syncMaterialsWithDB();
+            logger.info(`Mudança detectada em ${filename}, sincronizando...`);
+            await SyncService.syncMaterialsWithDB();
           }, 1000);
         }
       });
-      logger.info(`Started watching data directory for CSV changes: ${path.basename(DATA_DIR)}`);
+      logger.info(`Monitorando alterações em: ${path.basename(DATA_DIR)}`);
     }
   } catch (error) {
-    logger.error('Failed to initialize materials cache with directory watcher', { error: error.message });
+    logger.error('Erro ao inicializar cache de materiais', { error: error.message });
     throw error;
   }
 };
-
 
 /**
  * Busca materiais no banco de dados SQLite.
@@ -62,7 +48,7 @@ const buscarMateriaisNoCSV = async (kitSugerido) => {
     .all(kitNormalizado);
 
   if (!materiais || materiais.length === 0) {
-    logger.warn(`Kit not found in DB: ${kitSugerido}`);
+    logger.warn(`Kit não encontrado no banco: ${kitSugerido}`);
     throw new Error(`Kit "${kitSugerido}" não encontrado. Verifique se o CSV está atualizado.`);
   }
 
@@ -77,7 +63,7 @@ const getAvailableKits = () => {
     const rows = sqlite.prepare('SELECT DISTINCT kit_nome FROM materiais ORDER BY kit_nome ASC').all();
     return rows.map(r => r.kit_nome);
   } catch (error) {
-    logger.error('Error listing kits from DB', { error: error.message });
+    logger.error('Erro ao listar kits do banco', { error: error.message });
     return [];
   }
 };
@@ -85,8 +71,5 @@ const getAvailableKits = () => {
 module.exports = {
   buscarMateriaisNoCSV,
   initializeMaterialsCache,
-  syncMaterialsWithDB,
   getAvailableKits
 };
-
-

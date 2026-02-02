@@ -36,21 +36,30 @@ app.use('/api', historyRoutes);
 app.use(errorHandler);
 
 
-// Inicialização assíncrona do servidor
-(async () => {
+// Função de inicialização e automação no boot
+async function bootstrap() {
   try {
-    // Initialize database (auto-migration)
-    logger.info('Initializing database...');
-    require('./db/client'); // Database auto-initializes on import
+    logger.info("Iniciando verificação de integridade de dados...");
 
-    // Warmup: Constrói o índice de materiais antes de aceitar requisições
-    logger.info('Warming up materials cache...');
+    // 1. Inicializa Banco de Dados e Migrações
+    require('./db/client');
+
+    // 2. Sincronização Inteligente CSV -> SQLite (Cache Warmup + Watcher)
     await initializeMaterialsCache();
 
-    // Inicia o servidor
-    app.listen(5000, () => logger.info("Backend modularizado rodando na porta 5000 (cache ativo)."));
+    logger.info("Base de dados de materiais atualizada.");
+
+    // 3. Inicia o Servidor
+    app.listen(5000, () => {
+      logger.info("Backend modularizado rodando na porta 5000 (cache ativo).");
+    });
+
   } catch (error) {
-    logger.error('Failed to start server', { error: error.message });
+    logger.error("Falha na sincronização inicial / Boot fail: " + error.message);
     process.exit(1);
   }
-})();
+}
+
+// Executa o gatilho de boot
+bootstrap();
+

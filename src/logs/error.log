@@ -15,3 +15,8 @@
 {"env":"development","error":"table materiais has no column named kit_nome","level":"error","message":"Intelligent sync failed","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
 {"env":"development","error":"table materiais has no column named kit_nome","level":"error","message":"Failed to perform intelligent database sync","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
 {"env":"development","error":"table materiais has no column named kit_nome","level":"error","message":"Intelligent sync failed","service":"app-engenharia-backend","timestamp":"2026-02-01 21:56:23"}
+{"env":"development","error":"syncDatabase is not a function","level":"error","message":"Intelligent sync failed","service":"app-engenharia-backend","timestamp":"2026-02-01 21:58:08"}
+{"env":"development","error":"syncDatabase is not a function","level":"error","message":"Intelligent sync failed","service":"app-engenharia-backend","timestamp":"2026-02-01 21:58:08"}
+{"env":"development","error":"syncDatabase is not a function","level":"error","message":"Intelligent sync failed","service":"app-engenharia-backend","timestamp":"2026-02-01 21:58:08"}
+{"env":"development","error":"syncDatabase is not a function","level":"error","message":"Intelligent sync failed","service":"app-engenharia-backend","timestamp":"2026-02-01 21:58:08"}
+{"env":"development","error":"syncDatabase is not a function","level":"error","message":"Intelligent sync failed","service":"app-engenharia-backend","timestamp":"2026-02-01 21:58:08"}
