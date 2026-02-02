@@ -54,8 +54,9 @@ async function startServer() {
 
 
     app.listen(5000, () => {
-      logger.info("Backend de Engenharia v0.2.4 operando na porta 5000");
+      logger.info("Backend de Engenharia v0.2.5 operando na porta 5000");
     });
+
 
   } catch (error) {
     logger.error("Falha crítica no bootstrap: " + error.message);

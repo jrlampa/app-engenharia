@@ -1389,3 +1389,178 @@
 {"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:51:08"}
 {"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:51:08"}
 {"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:51:08"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:18"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:18"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:18"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:18"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:18"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:18"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:18"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:18"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:18"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:18"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:18"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:18"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:18"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:18"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:18"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.4 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:19"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:30"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:31"}
+{"env":"development","level":"info","message":"Iniciando bootstrap do sistema...","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:31"}
+{"env":"development","level":"info","message":"Base de dados de materiais já está atualizada (Cache MTIME).","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:31"}
+{"env":"development","level":"info","message":"Monitorando alterações em: data","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:31"}
+{"env":"development","level":"info","message":"Backend de Engenharia v0.2.5 operando na porta 5000","service":"app-engenharia-backend","timestamp":"2026-02-01 22:55:31"}
