@@ -8,6 +8,7 @@ const tracaoRoutes = require('./routes/tracaoRoutes');
 const tensaoRoutes = require('./routes/tensaoRoutes');
 const cabosRoutes = require('./routes/cabosRoutes');
 const historyRoutes = require('./routes/historyRoutes');
+const errorHandler = require('./middleware/errorHandler');
 
 // Services (para cache warmup)
 const { initializeMaterialsCache } = require('./services/MaterialService');
@@ -25,7 +26,6 @@ app.use((req, res, next) => {
 // Wrapper Global para evitar crash
 process.on('uncaughtException', (err) => {
   logger.error(`FATAL ERROR: ${err.message}`, { stack: err.stack });
-  // Não encerra abruptamente, tenta manter o estado
 });
 
 // --- ROTAS ---
@@ -33,6 +33,10 @@ app.use('/api', tracaoRoutes);
 app.use('/api', tensaoRoutes);
 app.use('/api', cabosRoutes);
 app.use('/api', historyRoutes);
+
+// --- ERROR HANDLER (Deve ser o último) ---
+app.use(errorHandler);
+
 
 // Inicialização assíncrona do servidor
 (async () => {
