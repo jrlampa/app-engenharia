@@ -187,3 +187,15 @@
 {"durationMs":1.181,"env":"development","level":"info","message":"GET /api/cabos/listar 404 - 1.181ms","method":"GET","service":"app-engenharia-backend","status":404,"timestamp":"2026-02-01 21:46:20","url":"/api/cabos/listar"}
 {"env":"development","level":"info","message":"Tabela de cabos solicitada","service":"app-engenharia-backend","timestamp":"2026-02-01 21:47:11"}
 {"durationMs":2.392,"env":"development","level":"info","message":"GET /api/tensao/cabos 200 - 2.392ms","method":"GET","service":"app-engenharia-backend","status":200,"timestamp":"2026-02-01 21:47:11","url":"/api/tensao/cabos"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:51:22"}
+{"env":"development","level":"info","message":"Database tables created/verified successfully","service":"app-engenharia-backend","timestamp":"2026-02-01 21:51:22"}
+{"env":"development","level":"info","message":"Initializing database...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:51:22"}
+{"env":"development","level":"info","message":"Warming up materials cache...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:51:22"}
+{"env":"development","level":"info","message":"Database is already up to date with all CSV files (stable state).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:51:22"}
+{"env":"development","level":"info","message":"Started watching data directory for CSV changes: data","service":"app-engenharia-backend","timestamp":"2026-02-01 21:51:22"}
+{"env":"development","level":"info","message":"Backend modularizado rodando na porta 5000 (cache ativo).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:51:22"}
+{"env":"development","level":"info","message":"Initializing database...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:51:22"}
+{"env":"development","level":"info","message":"Warming up materials cache...","service":"app-engenharia-backend","timestamp":"2026-02-01 21:51:22"}
+{"env":"development","level":"info","message":"Database is already up to date with all CSV files (stable state).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:51:22"}
+{"env":"development","level":"info","message":"Started watching data directory for CSV changes: data","service":"app-engenharia-backend","timestamp":"2026-02-01 21:51:22"}
+{"env":"development","level":"info","message":"Backend modularizado rodando na porta 5000 (cache ativo).","service":"app-engenharia-backend","timestamp":"2026-02-01 21:51:22"}

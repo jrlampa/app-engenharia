@@ -1,35 +1,47 @@
-const { calcularTracao } = require('../services/CalculationService');
+const { calcularTracao: calcularFlecha } = require('../services/CalculationService');
 const { buscarMateriaisNoCSV } = require('../services/MaterialService');
 const { saveCalculoTracao } = require('../services/HistoryService');
 const logger = require('../utils/logger');
 const asyncHandler = require('../utils/asyncHandler');
 
 /**
- * Controller para cálculo de tração.
+ * DOCUMENTAÇÃO: Controller de Tração.
+ * Centraliza validação, cálculo e busca de materiais com persistência.
+ * 
+ * Orquestração:
+ * 1. Recebe dados validados pelo middleware de rota.
+ * 2. Executa cálculo de flecha (Service Layer).
+ * 3. Busca materiais recomendados (Data Layer).
+ * 4. Persiste no histórico (Persistence Layer).
  */
 const calcularTracaoController = asyncHandler(async (req, res) => {
   const { vao, pesoCabo, tracaoInicial } = req.body;
   const { projectId } = req.query;
 
-  // Lógica de cálculo delegada para o Service
-  const { flecha, sugestao } = calcularTracao(vao, pesoCabo, tracaoInicial);
+  // 1. Cálculo (Service Layer)
+  const resultadoCalculo = calcularFlecha(vao, pesoCabo, tracaoInicial);
 
-  // Acesso a Dados delegado para o Service
-  const materiais = await buscarMateriaisNoCSV(sugestao);
-  const resultado = { flecha, sugestao, materiais };
+  // 2. Busca de Materiais (Cache Indexado/SQLite)
+  const materiais = await buscarMateriaisNoCSV(resultadoCalculo.sugestao);
 
-  // Persistência delegada para o HistoryService (não bloqueante para o cálculo)
+  const resultadoFinal = { ...resultadoCalculo, materiais };
+
+  // 3. Persistência (History Service - Non-blocking)
   try {
-    saveCalculoTracao(projectId, req.body, resultado);
+    saveCalculoTracao(projectId, req.body, resultadoFinal);
   } catch (dbError) {
-    logger.warn('Failed to save calculation to database', { error: dbError.message });
+    logger.warn('History persistence failed, but calculation succeeded', { error: dbError.message });
   }
 
-  // Log de sucesso
-  logger.info("Cálculo de tração realizado com sucesso", { flecha, sugestao });
+  // 4. Auditoria de Performance e Log
+  logger.info(`Cálculo de tração realizado: Vão ${vao}m, Sugestão: ${resultadoCalculo.sugestao}`);
 
-  res.json({ sucesso: true, resultado });
+  res.json({
+    sucesso: true,
+    resultado: resultadoFinal
+  });
 });
 
 module.exports = { calcularTracaoController };
+
 
