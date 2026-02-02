@@ -8,7 +8,6 @@ const ModuloTensao = () => {
   const [cabos, setCabos] = useState([]);
   const [loadingCabos, setLoadingCabos] = useState(true);
 
-  // Buscar tabela de cabos do backend
   useEffect(() => {
     const fetchCabos = async () => {
       try {
@@ -16,7 +15,6 @@ const ModuloTensao = () => {
         const data = await response.json();
         if (data.sucesso) {
           setCabos(data.cabos);
-          // Define o primeiro cabo como padrão
           if (data.cabos.length > 0) {
             setTensaoData(prev => ({ ...prev, caboR: data.cabos[0].r }));
           }
@@ -24,7 +22,6 @@ const ModuloTensao = () => {
       } catch (error) {
         console.error("Erro ao buscar cabos:", error);
         toast.error("Erro ao carregar tabela de cabos");
-        // Fallback para dados locais se API falhar
         const fallbackCabos = [
           { nome: "10mm²", r: 1.83 },
           { nome: "16mm²", r: 1.15 },
@@ -44,7 +41,6 @@ const ModuloTensao = () => {
     setLoading(true);
     try {
       let data;
-      // Verifica se está rodando no Electron via IPC
       if (window.electronAPI) {
         data = await window.electronAPI.calcularTensao({
           tensaoNominal: Number(tensaoData.nominal),
@@ -53,7 +49,6 @@ const ModuloTensao = () => {
           resistenciaKm: Number(tensaoData.caboR)
         });
       } else {
-        // Fallback HTTP
         const response = await fetch('http://localhost:5000/api/tensao/calcular', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -81,41 +76,110 @@ const ModuloTensao = () => {
   };
 
   return (
-    <div style={{ padding: '30px', fontFamily: 'Segoe UI, sans-serif' }}>
-      <h2>⚡ Cálculo de Queda de Tensão</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px' }}>
-        <input type="number" placeholder="Tensão (V)" value={tensaoData.nominal} onChange={e => setTensaoData({ ...tensaoData, nominal: e.target.value })} />
-        <input type="number" placeholder="Corrente (A)" value={tensaoData.corrente} onChange={e => setTensaoData({ ...tensaoData, corrente: e.target.value })} />
-        <input type="number" placeholder="Distância (m)" value={tensaoData.dist} onChange={e => setTensaoData({ ...tensaoData, dist: e.target.value })} />
-        <select
-          value={tensaoData.caboR}
-          onChange={e => setTensaoData({ ...tensaoData, caboR: e.target.value })}
-          disabled={loadingCabos}
-        >
-          {loadingCabos && <option>Carregando...</option>}
-          {cabos.map(c => <option key={c.nome} value={c.r}>{c.nome}</option>)}
-        </select>
+    <div>
+      <h1 style={{ color: '#2c3e50', marginBottom: '30px', fontWeight: '300', fontSize: '2em' }}>
+        ⚡ Cálculo de Queda de Tensão
+      </h1>
+
+      <div className="glass-card" style={{ padding: '40px', maxWidth: '800px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
+          <div>
+            <label style={{ display: 'block', marginBottom: '6px', fontSize: '14px', color: '#7f8c8d' }}>
+              Tensão Nominal (V)
+            </label>
+            <input
+              type="number"
+              className="glass-input"
+              style={{ width: '100%' }}
+              value={tensaoData.nominal}
+              onChange={e => setTensaoData({ ...tensaoData, nominal: e.target.value })}
+            />
+          </div>
+
+          <div>
+            <label style={{ display: 'block', marginBottom: '6px', fontSize: '14px', color: '#7f8c8d' }}>
+              Corrente (A)
+            </label>
+            <input
+              type="number"
+              className="glass-input"
+              style={{ width: '100%' }}
+              value={tensaoData.corrente}
+              onChange={e => setTensaoData({ ...tensaoData, corrente: e.target.value })}
+            />
+          </div>
+
+          <div>
+            <label style={{ display: 'block', marginBottom: '6px', fontSize: '14px', color: '#7f8c8d' }}>
+              Distância (m)
+            </label>
+            <input
+              type="number"
+              className="glass-input"
+              style={{ width: '100%' }}
+              value={tensaoData.dist}
+              onChange={e => setTensaoData({ ...tensaoData, dist: e.target.value })}
+            />
+          </div>
+
+          <div>
+            <label style={{ display: 'block', marginBottom: '6px', fontSize: '14px', color: '#7f8c8d' }}>
+              Cabo
+            </label>
+            <select
+              value={tensaoData.caboR}
+              onChange={e => setTensaoData({ ...tensaoData, caboR: e.target.value })}
+              disabled={loadingCabos}
+              className="glass-input"
+              style={{ width: '100%', cursor: loadingCabos ? 'not-allowed' : 'pointer' }}
+            >
+              {loadingCabos && <option>Carregando...</option>}
+              {cabos.map(c => <option key={c.nome} value={c.r}>{c.nome}</option>)}
+            </select>
+          </div>
+        </div>
+
         <button
           onClick={calcularTensao}
           disabled={loading || loadingCabos}
-          style={{
-            padding: '10px',
-            background: (loading || loadingCabos) ? '#95a5a6' : '#3498db',
-            color: '#fff',
-            border: 'none',
-            cursor: (loading || loadingCabos) ? 'not-allowed' : 'pointer',
-            borderRadius: '4px'
-          }}
+          className="glass-button glass-button-primary"
+          style={{ width: '100%', marginTop: '30px' }}
         >
-          {loading ? 'Calculando...' : 'Calcular Queda'}
+          {loading ? 'Calculando...' : 'Calcular Queda de Tensão'}
         </button>
-      </div>
 
-      {res && (
-        <div style={{ color: res.status === "CRÍTICO" ? "red" : "green", fontWeight: 'bold', marginTop: '10px' }}>
-          Queda: {res.quedaPercentual}% ({res.quedaVolts}V) - {res.status}
-        </div>
-      )}
+        {loading ? (
+          <div style={{ marginTop: '30px' }}>
+            <div className="skeleton skeleton-text" style={{ width: '70%' }}></div>
+            <div className="skeleton skeleton-text" style={{ width: '50%', marginTop: '10px' }}></div>
+          </div>
+        ) : res && (
+          <div style={{
+            marginTop: '30px',
+            padding: '20px',
+            background: res.status === "CRÍTICO"
+              ? 'rgba(231, 76, 60, 0.1)'
+              : 'rgba(39, 174, 96, 0.1)',
+            borderRadius: '12px',
+            borderLeft: `4px solid ${res.status === "CRÍTICO" ? '#e74c3c' : '#27ae60'}`
+          }}>
+            <div style={{
+              color: res.status === "CRÍTICO" ? '#e74c3c' : '#27ae60',
+              fontWeight: 'bold',
+              fontSize: '18px',
+              marginBottom: '10px'
+            }}>
+              {res.status === "CRÍTICO" ? '⚠️ Queda Crítica' : '✅ Dentro do Limite'}
+            </div>
+            <p style={{ color: '#2c3e50', margin: '5px 0' }}>
+              <strong>Queda:</strong> {res.quedaPercentual}% ({res.quedaVolts}V)
+            </p>
+            <p style={{ color: '#7f8c8d', fontSize: '14px', marginTop: '10px' }}>
+              Limite NBR 5410: 5%
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
