@@ -27,4 +27,23 @@ const listarHistorico = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { listarHistorico };
+/**
+ * Controller para exclusão de registro.
+ */
+const excluirHistorico = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({ sucesso: false, erro: "ID do registro é obrigatório." });
+  }
+
+  await HistoryService.excluirCalculo(id);
+
+  res.json({
+    sucesso: true,
+    mensagem: `Registro #${id} removido com sucesso.`
+  });
+});
+
+module.exports = { listarHistorico, excluirHistorico };
+

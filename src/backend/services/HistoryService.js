@@ -135,7 +135,25 @@ class HistoryService {
   }
 
   /**
+   * Remove um registro do histórico pelo ID.
+   */
+  static async excluirCalculo(id) {
+    try {
+      await db.delete(historicoCalculos)
+        .where(eq(historicoCalculos.id, parseInt(id)))
+        .execute();
+
+      logger.info(`Registro de histórico #${id} excluído com sucesso.`);
+      return true;
+    } catch (error) {
+      logger.error(`Erro ao excluir registro de histórico ${id}: ${error.message}`);
+      throw error;
+    }
+  }
+
+  /**
    * Métodos legados mantidos para compatibilidade temporária (v0.2.3)
+
 
    */
   static async saveCalculoTracao(projectId, dados, resultado) {

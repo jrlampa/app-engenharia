@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { listarHistorico } = require('../controllers/historicoController');
+const { listarHistorico, excluirHistorico } = require('../controllers/historicoController');
 
 /**
  * @route GET /api/historico
@@ -9,4 +9,11 @@ const { listarHistorico } = require('../controllers/historicoController');
  */
 router.get('/', listarHistorico);
 
+/**
+ * @route DELETE /api/historico/:id
+ * @desc Remove um registro específico do histórico
+ */
+router.delete('/:id', excluirHistorico);
+
 module.exports = router;
+
