@@ -7,8 +7,21 @@ const ModuloTensao = () => {
   const [loading, setLoading] = useState(false);
   const [cabos, setCabos] = useState([]);
   const [loadingCabos, setLoadingCabos] = useState(true);
+  const [projects, setProjects] = useState([]);
+  const [projectId, setProjectId] = useState('');
 
   useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/history/projects');
+        const data = await response.json();
+        if (data.sucesso) setProjects(data.projects);
+      } catch (e) {
+        console.error('Error fetching projects', e);
+      }
+    };
+    fetchProjects();
+
     const fetchCabos = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/tensao/cabos');
@@ -41,23 +54,22 @@ const ModuloTensao = () => {
     setLoading(true);
     try {
       let data;
+      const payload = {
+        tensaoNominal: Number(tensaoData.nominal),
+        corrente: Number(tensaoData.corrente),
+        comprimento: Number(tensaoData.dist),
+        resistenciaKm: Number(tensaoData.caboR),
+        projectId
+      };
+
       if (window.electronAPI) {
-        data = await window.electronAPI.calcularTensao({
-          tensaoNominal: Number(tensaoData.nominal),
-          corrente: Number(tensaoData.corrente),
-          comprimento: Number(tensaoData.dist),
-          resistenciaKm: Number(tensaoData.caboR)
-        });
+        data = await window.electronAPI.calcularTensao(payload);
       } else {
-        const response = await fetch('http://localhost:5000/api/tensao/calcular', {
+        const queryParam = projectId ? `?projectId=${projectId}` : '';
+        const response = await fetch(`http://localhost:5000/api/tensao/calcular${queryParam}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            tensaoNominal: Number(tensaoData.nominal),
-            corrente: Number(tensaoData.corrente),
-            comprimento: Number(tensaoData.dist),
-            resistenciaKm: Number(tensaoData.caboR)
-          })
+          body: JSON.stringify(payload)
         });
         data = await response.json();
       }
@@ -82,6 +94,20 @@ const ModuloTensao = () => {
       </h1>
 
       <div className="glass-card" style={{ padding: '40px', maxWidth: '800px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+          <h3 style={{ margin: 0, color: '#2c3e50' }}>Parâmetros</h3>
+          <select
+            className="glass-input"
+            style={{ padding: '4px 8px', fontSize: '12px', width: 'auto', minWidth: '150px' }}
+            value={projectId}
+            onChange={(e) => setProjectId(e.target.value)}
+          >
+            <option value="">Cálculo Avulso</option>
+            {projects.map(p => (
+              <option key={p.id} value={p.id}>{p.name}</option>
+            ))}
+          </select>
+        </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
           <div>
             <label style={{ display: 'block', marginBottom: '6px', fontSize: '14px', color: '#7f8c8d' }}>

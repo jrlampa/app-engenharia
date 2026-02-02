@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Activity, Zap } from 'lucide-react';
+import { Activity, Zap, History } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import ModuloTracao from './components/ModuloTracao';
 import ModuloTensao from './components/ModuloTensao';
+import HistoricoCalculos from './components/HistoricoCalculos';
 import './App.css';
 
 function App() {
@@ -45,12 +46,21 @@ function App() {
           <Zap size={20} />
           Queda de Tensão
         </button>
+
+        <button
+          onClick={() => setAbaAtiva('historico')}
+          className={`glass-sidebar-button ${abaAtiva === 'historico' ? 'active' : ''}`}
+        >
+          <History size={20} />
+          Histórico
+        </button>
       </div>
 
       {/* Main Content */}
       <div style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
         {abaAtiva === 'tracao' && <ModuloTracao />}
         {abaAtiva === 'tensao' && <ModuloTensao />}
+        {abaAtiva === 'historico' && <HistoricoCalculos />}
       </div>
     </div>
   );

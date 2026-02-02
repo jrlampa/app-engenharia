@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { gerarRelatorioTracao } from '../utils/exportPDF';
 
@@ -6,6 +6,21 @@ const ModuloTracao = () => {
   const [dados, setDados] = useState({ vao: 40, pesoCabo: 0.5, tracaoInicial: 200 });
   const [resultado, setResultado] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [projectId, setProjectId] = useState('');
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/history/projects');
+        const data = await response.json();
+        if (data.sucesso) setProjects(data.projects);
+      } catch (e) {
+        console.error('Error fetching projects', e);
+      }
+    };
+    fetchProjects();
+  }, []);
 
   const calcular = async () => {
     setLoading(true);
@@ -13,10 +28,11 @@ const ModuloTracao = () => {
       let data;
       if (window.electronAPI) {
         console.log("Usando IPC Electron...");
-        data = await window.electronAPI.calcularTracao(dados);
+        data = await window.electronAPI.calcularTracao({ ...dados, projectId });
       } else {
         console.log("Usando HTTP Fetch...");
-        const response = await fetch('http://localhost:5000/api/tracao/calcular', {
+        const queryParam = projectId ? `?projectId=${projectId}` : '';
+        const response = await fetch(`http://localhost:5000/api/tracao/calcular${queryParam}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(dados)
@@ -47,7 +63,20 @@ const ModuloTracao = () => {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
         {/* Form Card */}
         <div className="glass-card" style={{ padding: '30px' }}>
-          <h3 style={{ marginBottom: '20px', color: '#2c3e50' }}>Parâmetros</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <h3 style={{ margin: 0, color: '#2c3e50' }}>Parâmetros</h3>
+            <select
+              className="glass-input"
+              style={{ padding: '4px 8px', fontSize: '12px', width: 'auto', minWidth: '150px' }}
+              value={projectId}
+              onChange={(e) => setProjectId(e.target.value)}
+            >
+              <option value="">Cálculo Avulso</option>
+              {projects.map(p => (
+                <option key={p.id} value={p.id}>{p.name}</option>
+              ))}
+            </select>
+          </div>
 
           <div style={{ display: 'grid', gap: '16px' }}>
             <div>
