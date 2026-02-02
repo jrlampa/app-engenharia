@@ -12,16 +12,33 @@ const historicoRoutes = require('./routes/historicoRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 
 const errorHandler = require('./middleware/errorHandler');
+const performanceLogger = require('./middleware/performanceLogger');
 
-// ...
+// Services (para cache warmup)
+const { MaterialService } = require('./services/MaterialService');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// Performance logger middleware (must be registered early)
+app.use(performanceLogger);
+
+// Wrapper Global para evitar crash
+process.on('uncaughtException', (err) => {
+  logger.error(`FATAL ERROR: ${err.message}`, { stack: err.stack });
+});
 
 // --- ROTAS ---
+
 app.use('/api', tracaoRoutes);
 app.use('/api', tensaoRoutes);
 app.use('/api', cabosRoutes);
 app.use('/api', historyRoutes);
 app.use('/api/historico', historicoRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/projects', require('./routes/reportingRoutes'));
+
 
 
 
