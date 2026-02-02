@@ -38,4 +38,20 @@ const calculosTensao = sqliteTable('calculos_tensao', {
   timestamp: text('timestamp').default(sql`CURRENT_TIMESTAMP`)
 });
 
-module.exports = { projects, calculosTracao, calculosTensao };
+// Materiais (CSV Cache) table
+const materiais = sqliteTable('materiais', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  kitName: text('kit_name').notNull(),
+  codigo: text('codigo').notNull(),
+  item: text('item').notNull(),
+  qtd: text('qtd').notNull()
+});
+
+// Sync Metadata table
+const syncMetadata = sqliteTable('sync_metadata', {
+  key: text('key').primaryKey(),
+  value: text('value').notNull()
+});
+
+module.exports = { projects, calculosTracao, calculosTensao, materiais, syncMetadata };
+

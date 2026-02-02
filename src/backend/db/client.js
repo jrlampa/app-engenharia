@@ -69,7 +69,27 @@ const initializeDatabase = () => {
       )
     `);
 
+    // Create materiais table (CSV Cache)
+    sqlite.exec(`
+      CREATE TABLE IF NOT EXISTS materiais (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        kit_name TEXT NOT NULL,
+        codigo TEXT NOT NULL,
+        item TEXT NOT NULL,
+        qtd TEXT NOT NULL
+      )
+    `);
+
+    // Create sync_metadata table
+    sqlite.exec(`
+      CREATE TABLE IF NOT EXISTS sync_metadata (
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL
+      )
+    `);
+
     logger.info('Database tables created/verified successfully');
+
   } catch (error) {
     logger.error('Failed to initialize database', { error: error.message });
     throw error;
