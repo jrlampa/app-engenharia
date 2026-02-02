@@ -5,3 +5,7 @@ out/
 build/
 .DS_Store
 dist_electron/
+
+# Backend generated files
+src/backend/data/materials-cache.json
+src/logs/

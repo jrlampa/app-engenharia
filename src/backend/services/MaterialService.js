@@ -67,13 +67,43 @@ const buildMaterialsIndex = (caminhoArquivo = null) => {
 
 /**
  * Inicializa o cache de materiais (chamado na startup do servidor).
+ * Tenta carregar de arquivo JSON persistido. Se não existir ou estiver desatualizado,
+ * rebuild do CSV e persiste.
  * 
  * @param {string|null} caminhoArquivo - Caminho customizado do CSV (para testes)
  */
 const initializeMaterialsCache = async (caminhoArquivo = null) => {
+  const caminhoCSV = caminhoArquivo || path.join(__dirname, '../data', 'RESUMO KITS MAIS USADOS.xlsx - ESTRUTURAS BRAÇO J.csv');
+  const cacheFilePath = path.join(__dirname, '../data', 'materials-cache.json');
+
   try {
+    // Verifica se cache existe e é mais recente que o CSV
+    if (fs.existsSync(cacheFilePath) && fs.existsSync(caminhoCSV)) {
+      const cacheStats = fs.statSync(cacheFilePath);
+      const csvStats = fs.statSync(caminhoCSV);
+
+      // Se cache é mais recente que CSV, carrega do cache
+      if (cacheStats.mtimeMs > csvStats.mtimeMs) {
+        const cacheData = fs.readFileSync(cacheFilePath, 'utf8');
+        materiaisCache = JSON.parse(cacheData);
+
+        const kitsCount = Object.keys(materiaisCache).length;
+        const materialsCount = Object.values(materiaisCache).reduce((sum, arr) => sum + arr.length, 0);
+
+        logger.info(`Materials cache loaded from disk: ${kitsCount} kits, ${materialsCount} materials (instant)`);
+        return;
+      } else {
+        logger.info('CSV is newer than cache, rebuilding...');
+      }
+    }
+
+    // Build cache do CSV
     materiaisCache = await buildMaterialsIndex(caminhoArquivo);
-    logger.info('Materials cache initialized successfully');
+
+    // Persiste cache em JSON
+    fs.writeFileSync(cacheFilePath, JSON.stringify(materiaisCache, null, 2), 'utf8');
+    logger.info('Materials cache built from CSV and persisted to disk');
+
   } catch (error) {
     logger.error('Failed to initialize materials cache', { error: error.message });
     throw error;
