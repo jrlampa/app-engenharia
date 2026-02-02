@@ -1,6 +1,7 @@
 const { db, sqlite } = require('../db/client');
 const { projects, historicoCalculos } = require('../db/schema');
-const { eq, desc } = require('drizzle-orm');
+const { eq, desc, and } = require('drizzle-orm');
+
 const logger = require('../utils/logger');
 
 /**
@@ -113,7 +114,29 @@ class HistoryService {
   }
 
   /**
+   * Busca histórico filtrado por tipo (TRACAO ou TENSAO).
+   */
+  static async buscarPorTipo(tipo) {
+    try {
+      const rows = await db.select()
+        .from(historicoCalculos)
+        .where(eq(historicoCalculos.tipo, tipo.toUpperCase()))
+        .orderBy(desc(historicoCalculos.id));
+
+      return rows.map(row => ({
+        ...row,
+        inputs: JSON.parse(row.inputs),
+        resultados: JSON.parse(row.resultados)
+      }));
+    } catch (error) {
+      logger.error(`Erro ao buscar histórico por tipo ${tipo}: ${error.message}`);
+      return [];
+    }
+  }
+
+  /**
    * Métodos legados mantidos para compatibilidade temporária (v0.2.3)
+
    */
   static async saveCalculoTracao(projectId, dados, resultado) {
     return this.salvarCalculo('TRACAO', dados, resultado, projectId);
