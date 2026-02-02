@@ -33,8 +33,17 @@ const maskFormat = winston.format((info) => {
       }
     });
   }
+  // Adiciona informações de recurso em caso de erro para Auditoria (v0.2.6)
+  if (info.level === 'error') {
+    info.system = {
+      freeMem: `${(os.freemem() / 1024 / 1024).toFixed(2)} MB`,
+      totalMem: `${(os.totalmem() / 1024 / 1024).toFixed(2)} MB`,
+      uptime: `${(os.uptime() / 3600).toFixed(2)} hours`
+    };
+  }
   return info;
 });
+
 
 // --- LOGGER PRINCIPAL ---
 const logger = winston.createLogger({
@@ -47,8 +56,12 @@ const logger = winston.createLogger({
   ),
   defaultMeta: {
     service: 'app-engenharia-backend',
-    env: isProduction ? 'production' : 'development'
+    env: isProduction ? 'production' : 'development',
+    version: 'v0.2.6',
+    platform: os.platform(),
+    arch: os.arch()
   },
+
   transports: [
     // Registro de erros críticos
     new winston.transports.File({

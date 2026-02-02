@@ -25,21 +25,21 @@ const calcularTracao = (vao, pesoCabo, tracaoInicial) => {
  * @returns {object} { quedaVolts, quedaPercentual, status }
  */
 const calcularQuedaTensao = (tensaoNominal, corrente, comprimento, resistenciaKm) => {
-  // 1. Cálculo da queda de tensão unitária (V)
-  // DeltaV = (2 * L * I * R) / 1000  (Para monofásico/bifásico)
+  // DeltaV = (2 * L * I * R) / 1000 (Monofásico/Bifásico)
   const quedaVolts = (2 * comprimento * corrente * resistenciaKm) / 1000;
-
-  // 2. Cálculo percentual
   const quedaPercentual = (quedaVolts / tensaoNominal) * 100;
 
-  // Limite normativo geralmente é 5%
-  const status = quedaPercentual > 5 ? "CRÍTICO" : "DENTRO DO LIMITE";
+  // Norma técnica (limite sugerido de 5%)
+  const LIMITE_NORMATIVO = 5;
+  const status = quedaPercentual > LIMITE_NORMATIVO ? "CRÍTICO" : "DENTRO DO LIMITE";
 
   return {
-    quedaVolts: quedaVolts.toFixed(2),
-    quedaPercentual: quedaPercentual.toFixed(2),
-    status: status
+    quedaVolts: Number(quedaVolts.toFixed(3)),
+    quedaPercentual: Number(quedaPercentual.toFixed(2)),
+    status,
+    limite: LIMITE_NORMATIVO
   };
 };
+
 
 module.exports = { calcularTracao, calcularQuedaTensao };

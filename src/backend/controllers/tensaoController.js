@@ -11,21 +11,22 @@ const calcularTensaoController = asyncHandler(async (req, res) => {
   const { tensaoNominal, corrente, comprimento, resistenciaKm } = req.body;
   const { projectId } = req.query;
 
-  // Lógica de cálculo delegada para o Service
+  // 1. Cálculo (Service Layer - v0.2.6)
   const resultado = calcularQuedaTensao(tensaoNominal, corrente, comprimento, resistenciaKm);
 
-  // 3. Persistência em background (não bloqueia a resposta ao utilizador)
+  // 2. Persistência em background
   HistoryService.salvarCalculo('TENSAO', req.body, resultado, projectId)
-    .catch(err => logger.error(`Erro ao salvar histórico em background: ${err.message}`));
+    .catch(err => logger.error(`Erro ao salvar histórico (Tensão): ${err.message}`));
 
-
-  logger.info("Cálculo de queda de tensão realizado", resultado);
+  // 3. Auditoria técnica
+  logger.info(`Cálculo de Tensão executado: ${resultado.quedaPercentual}% de queda. Status: ${resultado.status}`);
 
   res.json({
     sucesso: true,
     resultado
   });
 });
+
 
 module.exports = { calcularTensaoController };
 

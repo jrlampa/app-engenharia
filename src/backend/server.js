@@ -37,34 +37,37 @@ app.use('/api', historyRoutes);
 app.use('/api/historico', historicoRoutes);
 
 
+const { checkDbIntegrity } = require('./db/health');
+const SyncService = require('./services/SyncService');
+
 // --- ERROR HANDLER (Deve ser o último) ---
 app.use(errorHandler);
 
 
-// Função de inicialização atômica no boot
-async function startServer() {
+// Função de inicialização atômica e resiliente (v0.2.6)
+async function bootstrap() {
   try {
-    logger.info("Iniciando bootstrap do sistema...");
+    logger.info("Iniciando Verificação de Sistema v0.2.6...");
 
-    // 1. Inicializa Banco de Dados e Migrações
+    // 1. Inicializa Banco e Verifica Integridade (Autocura)
     require('./db/client');
+    await checkDbIntegrity();
 
-    // 2. Sincroniza CSV com SQLite no boot (Garante integridade antes de aceitar conexões)
-    await MaterialService.initializeMaterialsCache();
-
+    // 2. Sincroniza materiais (Apenas se necessário - Alta performance)
+    await SyncService.syncMaterialsWithDB();
 
     app.listen(5000, () => {
-      logger.info("Backend de Engenharia v0.2.5 operando na porta 5000");
+      logger.info("Backend Blindado operando na porta 5000");
     });
 
-
   } catch (error) {
-    logger.error("Falha crítica no bootstrap: " + error.message);
+    logger.error("FALHA CRÍTICA NO BOOTSTRAP: " + error.message);
     process.exit(1);
   }
 }
 
-// Executa o servidor
-startServer();
+// Executa o bootstrap
+bootstrap();
+
 
 
