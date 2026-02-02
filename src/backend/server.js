@@ -9,6 +9,7 @@ const tensaoRoutes = require('./routes/tensaoRoutes');
 const cabosRoutes = require('./routes/cabosRoutes');
 const historyRoutes = require('./routes/historyRoutes');
 const errorHandler = require('./middleware/errorHandler');
+const performanceLogger = require('./middleware/performanceLogger');
 
 // Services (para cache warmup)
 const { initializeMaterialsCache } = require('./services/MaterialService');
@@ -17,11 +18,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Request logger middleware
-app.use((req, res, next) => {
-  logger.info(`${req.method} ${req.url}`, { body: req.body });
-  next();
-});
+// Performance logger middleware (must be registered early)
+app.use(performanceLogger);
 
 // Wrapper Global para evitar crash
 process.on('uncaughtException', (err) => {
