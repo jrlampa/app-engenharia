@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { sqlite } = require('../db/client');
-const { syncDatabase } = require('./MaterialSyncService');
+const { syncDatabase } = require('./SyncService');
 const logger = require('../utils/logger');
 
 const DATA_DIR = path.join(__dirname, '../data');

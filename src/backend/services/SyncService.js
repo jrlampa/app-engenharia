@@ -107,9 +107,6 @@ const parseCSV = (caminhoCSV) => {
   });
 };
 
-module.exports = {
-  syncDatabase,
-  // Mantido para compatibilidade se necessário em testes unitários específicos
-  syncMaterialsFromCSV: syncDatabase
-};
+module.exports = { syncDatabase };
+
 
