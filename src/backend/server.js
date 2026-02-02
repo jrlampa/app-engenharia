@@ -7,6 +7,7 @@ const logger = require('./utils/logger');
 const tracaoRoutes = require('./routes/tracaoRoutes');
 const tensaoRoutes = require('./routes/tensaoRoutes');
 const cabosRoutes = require('./routes/cabosRoutes');
+const historyRoutes = require('./routes/historyRoutes');
 
 // Services (para cache warmup)
 const { initializeMaterialsCache } = require('./services/MaterialService');
@@ -31,10 +32,15 @@ process.on('uncaughtException', (err) => {
 app.use('/api', tracaoRoutes);
 app.use('/api', tensaoRoutes);
 app.use('/api', cabosRoutes);
+app.use('/api', historyRoutes);
 
 // Inicialização assíncrona do servidor
 (async () => {
   try {
+    // Initialize database (auto-migration)
+    logger.info('Initializing database...');
+    require('./db/client'); // Database auto-initializes on import
+
     // Warmup: Constrói o índice de materiais antes de aceitar requisições
     logger.info('Warming up materials cache...');
     await initializeMaterialsCache();

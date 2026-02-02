@@ -8,4 +8,6 @@ dist_electron/
 
 # Backend generated files
 src/backend/data/materials-cache.json
+src/backend/data/*.db
+src/backend/data/*.db-journal
 src/logs/
