@@ -1,51 +1,52 @@
 const fs = require('fs');
 const path = require('path');
 const { sqlite } = require('../db/client');
-const { syncMaterialsFromCSV } = require('./MaterialSyncService');
+const { syncDatabase } = require('./MaterialSyncService');
 const logger = require('../utils/logger');
 
-const CSV_PATH = path.join(__dirname, '../data', 'RESUMO KITS MAIS USADOS.xlsx - ESTRUTURAS BRAÇO J.csv');
+const DATA_DIR = path.join(__dirname, '../data');
 
 /**
  * Encapsula a lógica de sincronização com o banco.
+ * De agora em diante, sincroniza a pasta inteira.
  */
-const syncMaterialsWithDB = async (caminho = null) => {
+const syncMaterialsWithDB = async () => {
   try {
-    await syncMaterialsFromCSV(caminho || CSV_PATH);
-    logger.info('Dynamic sync performed successfully');
+    await syncDatabase();
   } catch (error) {
-    logger.error('Dynamic sync failed', { error: error.message });
+    logger.error('Intelligent sync failed', { error: error.message });
   }
 };
 
 /**
- * Inicializa o cache de materiais e configura o monitoramento do CSV.
+ * Inicializa o cache de materiais e configura o monitoramento da pasta data.
  */
 const initializeMaterialsCache = async () => {
   try {
-    // Sync inicial
+    // Sync inicial (inteligente: só faz se houver mudanças)
     await syncMaterialsWithDB();
 
-    // Configura Watcher para mudanças dinâmicas
-    if (fs.existsSync(CSV_PATH)) {
+    // Configura Watcher para mudanças dinâmicas na PASTA inteira
+    if (fs.existsSync(DATA_DIR)) {
       let timeout;
-      fs.watch(CSV_PATH, (eventType) => {
-        if (eventType === 'change') {
-          // Debounce de 1 segundo para evitar múltiplas leituras durante gravação
+      fs.watch(DATA_DIR, (eventType, filename) => {
+        // Ignora mudanças em arquivos que não sejam CSV (como o calculations.db)
+        if (filename && filename.endsWith('.csv')) {
           clearTimeout(timeout);
           timeout = setTimeout(async () => {
-            logger.info('CSV change detected, triggering sync...');
+            logger.info(`Change detected in ${filename}, triggering intelligent sync...`);
             await syncMaterialsWithDB();
           }, 1000);
         }
       });
-      logger.info(`Started watching CSV for changes: ${path.basename(CSV_PATH)}`);
+      logger.info(`Started watching data directory for CSV changes: ${path.basename(DATA_DIR)}`);
     }
   } catch (error) {
-    logger.error('Failed to initialize materials cache with watcher', { error: error.message });
+    logger.error('Failed to initialize materials cache with directory watcher', { error: error.message });
     throw error;
   }
 };
+
 
 /**
  * Busca materiais no banco de dados SQLite.

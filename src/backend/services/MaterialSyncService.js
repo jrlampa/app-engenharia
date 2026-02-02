@@ -4,37 +4,51 @@ const csv = require('csv-parser');
 const { sqlite } = require('../db/client');
 const logger = require('../utils/logger');
 
+const DATA_DIR = path.join(__dirname, '../data');
+
 /**
- * Sincroniza os materiais do CSV para o banco de dados se houver alterações.
- * 
- * @param {string|null} caminhoArquivo - Caminho customizado do CSV (para testes)
- * @returns {Promise<void>}
+ * Sincroniza todos os CSVs da pasta data com o banco de dados.
+ * Detecta mudanças baseando-se no mtime dos arquivos.
  */
-const syncMaterialsFromCSV = async (caminhoArquivo = null) => {
-  const caminhoCSV = caminhoArquivo || path.join(__dirname, '../data', 'RESUMO KITS MAIS USADOS.xlsx - ESTRUTURAS BRAÇO J.csv');
-
-  if (!fs.existsSync(caminhoCSV)) {
-    logger.error(`CSV file not found for sync: ${caminhoCSV}`);
-    return;
-  }
-
+const syncDatabase = async () => {
   try {
-    const stats = fs.statSync(caminhoCSV);
-    const mtime = stats.mtimeMs.toString();
+    const files = fs.readdirSync(DATA_DIR).filter(f => f.endsWith('.csv'));
 
-    // Verifica último sync
-    const lastSync = sqlite.prepare('SELECT value FROM sync_metadata WHERE key = ?').get('csv_mtime');
-
-    if (lastSync && lastSync.value === mtime) {
-      logger.info('Materials DB is up to date with CSV (cached by mtime)');
+    if (files.length === 0) {
+      logger.warn('No CSV files found for synchronization in data directory.');
       return;
     }
 
-    logger.info(`CSV modified. Syncing materials to DB: ${caminhoCSV}`);
+    // Gera um "hash" simplificado do estado atual (combinação de mtimes)
+    let stateHash = "";
+    const fileStats = files.map(file => {
+      const fullPath = path.join(DATA_DIR, file);
+      const stats = fs.statSync(fullPath);
+      stateHash += `${file}:${stats.mtimeMs};`;
+      return { file, fullPath, mtime: stats.mtimeMs.toString() };
+    });
 
-    const index = await parseCSV(caminhoCSV);
+    // Verifica se o estado global mudou
+    const lastSyncHash = sqlite.prepare('SELECT value FROM sync_metadata WHERE key = ?').get('global_csv_state');
 
-    // Inserção em transação para performance e atomicidade
+    if (lastSyncHash && lastSyncHash.value === stateHash) {
+      logger.info('Database is already up to date with all CSV files (stable state).');
+      return;
+    }
+
+    logger.info(`Changes detected in CSV directory. Starting full re-sync...`);
+
+    let allMaterials = {};
+
+    // Processa cada arquivo e acumula os materiais
+    for (const item of fileStats) {
+      logger.debug(`Parsing ${item.file}...`);
+      const fileData = await parseCSV(item.fullPath);
+      // Merge dos materiais (kits de arquivos diferentes são acumulados)
+      Object.assign(allMaterials, fileData);
+    }
+
+    // Inserção atômica em transação
     const deleteStmt = sqlite.prepare('DELETE FROM materiais');
     const insertStmt = sqlite.prepare('INSERT INTO materiais (kit_name, codigo, item, qtd) VALUES (?, ?, ?, ?)');
     const upsertMetadata = sqlite.prepare('INSERT OR REPLACE INTO sync_metadata (key, value) VALUES (?, ?)');
@@ -42,24 +56,24 @@ const syncMaterialsFromCSV = async (caminhoArquivo = null) => {
     const transaction = sqlite.transaction((data) => {
       deleteStmt.run();
       for (const kitName in data) {
-        for (const item of data[kitName]) {
-          insertStmt.run(kitName, item.codigo, item.item, item.qtd);
+        for (const material of data[kitName]) {
+          insertStmt.run(kitName, material.codigo, material.item, material.qtd);
         }
       }
-      upsertMetadata.run('csv_mtime', mtime);
+      upsertMetadata.run('global_csv_state', stateHash);
     });
 
-    transaction(index);
-    logger.info(`Sync complete. Materials table rebuilt from CSV.`);
+    transaction(allMaterials);
+    logger.info(`Intelligent sync complete. Database rebuilt from ${files.length} CSV files.`);
 
   } catch (error) {
-    logger.error('Failed to sync materials from CSV', { error: error.message });
+    logger.error('Failed to perform intelligent database sync', { error: error.message });
     throw error;
   }
 };
 
 /**
- * Faz o parsing do CSV para um objeto em memória antes de persistir.
+ * Faz o parsing de um CSV específico.
  */
 const parseCSV = (caminhoCSV) => {
   return new Promise((resolve, reject) => {
@@ -73,6 +87,7 @@ const parseCSV = (caminhoCSV) => {
         const col2 = row[2] ? row[2].trim() : "";
         const col3 = row[3] ? row[3].trim() : "";
 
+        // Regra de detecção de Kit (específica para o formato atual)
         if (col1 && col1.includes('BRAÇO J') && !col2) {
           currentKit = col1;
           index[currentKit] = [];
@@ -92,4 +107,9 @@ const parseCSV = (caminhoCSV) => {
   });
 };
 
-module.exports = { syncMaterialsFromCSV };
+module.exports = {
+  syncDatabase,
+  // Mantido para compatibilidade se necessário em testes unitários específicos
+  syncMaterialsFromCSV: syncDatabase
+};
+
