@@ -41,6 +41,8 @@ app.use('/api/projects', require('./routes/reportingRoutes'));
 app.use('/api/projects', require('./routes/exportRoutes')); // v0.3.0
 app.use('/api/projects', require('./routes/auditRoutes'));  // v0.3.1
 app.use('/api/config', require('./routes/configRoutes'));     // v0.3.2
+app.use('/api/clients', require('./routes/clientRoutes'));    // v0.3.3
+
 
 
 

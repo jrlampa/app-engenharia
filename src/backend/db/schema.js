@@ -2,14 +2,8 @@ const { sqliteTable, integer, real, text } = require('drizzle-orm/sqlite-core');
 const { sql } = require('drizzle-orm');
 
 // Projects table
-const projects = sqliteTable('projects', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  name: text('name').notNull(),
-  description: text('description'),
-  client: text('client'),
-  location: text('location'),
-  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`)
-});
+// (Antiga declaração de projects removida - Ver abaixo v0.3.3)
+
 
 // Calculos de Tração table
 const calculosTracao = sqliteTable('calculos_tracao', {
@@ -74,13 +68,36 @@ const metadadosSync = sqliteTable('metadados_sync', {
 const settings = sqliteTable('settings', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   empresaNome: text('empresa_nome').default('Minha Empresa de Engenharia'),
-  empresaLogo: text('empresa_logo'), // Caminho local ou URL
+  empresaLogo: text('empresa_logo'),
   corPrimaria: text('cor_primaria').default('#007bff'),
   engenheiroResponsavel: text('engenheiro_responsavel').default('Engenheiro Chefe'),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`)
 });
 
-module.exports = { projects, calculosTracao, calculosTensao, materiais, metadadosSync, historicoCalculos, settings };
+// CRM: Clientes (v0.3.3)
+const clients = sqliteTable('clients', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  email: text('email'),
+  phone: text('phone'),
+  company: text('company'),
+  notes: text('notes'),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`)
+});
+
+// Projetos (Atualizado v0.3.3)
+const projects = sqliteTable('projects', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  description: text('description'),
+  client: text('client'), // Mantido para legado
+  clientId: integer('client_id').references(() => clients.id), // Nova FK
+  location: text('location'),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`)
+});
+
+module.exports = { projects, calculosTracao, calculosTensao, materiais, metadadosSync, historicoCalculos, settings, clients };
+
 
 
 

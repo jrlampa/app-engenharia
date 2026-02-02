@@ -52,6 +52,32 @@ class AnalyticsService {
       throw error;
     }
   }
+
+  /**
+   * Retorna os Top 5 Clientes por volume de projetos (BI).
+   */
+  static async getTopClients() {
+    try {
+      const { clients } = require('../db/schema');
+
+      const topClients = await db.select({
+        clientId: clients.id,
+        clientName: clients.name,
+        projectCount: sql`count(${projects.id})`
+      })
+        .from(clients)
+        .leftJoin(projects, eq(projects.clientId, clients.id))
+        .groupBy(clients.id)
+        .orderBy(sql`count(${projects.id}) DESC`)
+        .limit(5)
+        .execute();
+
+      return topClients;
+    } catch (error) {
+      logger.error(`Erro ao obter Top Clientes: ${error.message}`);
+      throw error;
+    }
+  }
 }
 
 module.exports = AnalyticsService;
