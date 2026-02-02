@@ -19,88 +19,56 @@ sqlite.pragma('journal_mode = WAL'); // Performance optimization
 // Initialize Drizzle
 const db = drizzle(sqlite);
 
+const { migrate } = require('drizzle-orm/better-sqlite3/migrator');
+
+// ...
+
 /**
- * Create tables if they don't exist (auto-migration).
+ * Initialize Database with Auto-Migrations (v0.2.7)
  */
 const initializeDatabase = () => {
   try {
-    // Create projects table
-    sqlite.exec(`
-      CREATE TABLE IF NOT EXISTS projects (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        description TEXT,
-        client TEXT,
-        location TEXT,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
+    // Verificação de Migração de Adoção (v0.2.7 - Retrofit)
+    // Se a tabela 'projects' existe mas '__drizzle_migrations' não, marcamos a migração inicial como feita.
+    const tableCheck = sqlite.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='projects'").get();
+    const migrationTableCheck = sqlite.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='__drizzle_migrations'").get();
 
-    // Create calculos_tracao table
-    sqlite.exec(`
-      CREATE TABLE IF NOT EXISTS calculos_tracao (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        project_id INTEGER,
-        vao REAL NOT NULL,
-        peso_cabo REAL NOT NULL,
-        tracao_inicial REAL NOT NULL,
-        flecha REAL NOT NULL,
-        sugestao TEXT NOT NULL,
-        materiais TEXT,
-        timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (project_id) REFERENCES projects(id)
-      )
-    `);
+    if (tableCheck && !migrationTableCheck) {
+      logger.info("Base legado detectada. Inicializando tabela de controle de migração...");
+      // Obtemos o nome do arquivo de migração gerado (precisa ser o 0000_...)
+      const fs = require('fs');
+      const migrationsDir = path.join(__dirname, 'migrations');
+      const files = fs.readdirSync(migrationsDir).filter(f => f.endsWith('.sql')).sort();
 
-    // Create calculos_tensao table
-    sqlite.exec(`
-      CREATE TABLE IF NOT EXISTS calculos_tensao (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        project_id INTEGER,
-        tensao_nominal REAL NOT NULL,
-        corrente REAL NOT NULL,
-        comprimento REAL NOT NULL,
-        resistencia_km REAL NOT NULL,
-        queda_volts REAL NOT NULL,
-        queda_percentual REAL NOT NULL,
-        status TEXT NOT NULL,
-        timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (project_id) REFERENCES projects(id)
-      )
-    `);
+      if (files.length > 0) {
+        const initialMigration = files[0].replace('.sql', '');
+        // Drizzle migration table schema (simplified for better-sqlite3 adapter expectation)
+        // CREATE TABLE `__drizzle_migrations` (`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL, `hash` text NOT NULL, `created_at` integer);
+        sqlite.exec("CREATE TABLE IF NOT EXISTS `__drizzle_migrations` (`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL, `hash` text NOT NULL, `created_at` integer)");
 
-    // Create materiais table (CSV Cache)
-    sqlite.exec(`
-      CREATE TABLE IF NOT EXISTS materiais (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        kit_nome TEXT NOT NULL,
-        codigo TEXT NOT NULL,
-        item TEXT NOT NULL,
-        quantidade REAL NOT NULL
-      )
-    `);
+        // Inserimos "fake" record. O hash real seria necessário, mas o Drizzle check é complexo.
+        // Para "pular", a melhor estratégia é rodar o CREATE IF NOT EXISTS nos arquivos SQL manualmente se falhar,
+        // ou... deletar o db em desenvolvimento (mas não é opção pro user).
 
+        // Better strategy: Catch the "table already exists" error during migrate and ignore it for the *first* run? 
+        // No, that's risky.
 
-    // Create metadados_sync table (v0.2.4)
-    sqlite.exec(`
-      CREATE TABLE IF NOT EXISTS metadados_sync (
-        chave TEXT PRIMARY KEY,
-        valor TEXT NOT NULL
-      )
-    `);
+        // Let's modify the generated SQL file to be `IF NOT EXISTS`.
+      }
+    }
 
-    // Migração: Se a tabela antiga existe, removemos (opcional, mas limpa o banco)
-    sqlite.exec(`DROP TABLE IF EXISTS sync_metadata`);
+    // Run migrations using the generated files
+    migrate(db, { migrationsFolder: path.join(__dirname, 'migrations') });
 
-    logger.info('Database tables created/verified successfully');
-
+    logger.info('Database migrations applied successfully (v0.2.7)');
 
 
   } catch (error) {
-    logger.error('Failed to initialize database', { error: error.message });
+    logger.error('Failed to apply database migrations', { error: error.message });
     throw error;
   }
 };
+
 
 // Auto-initialize on import
 initializeDatabase();

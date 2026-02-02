@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
+    "drizzle-kit": "^0.31.8",
     "electron-builder": "^26.7.0",
     "jest": "^30.2.0",
     "nodemon": "^3.1.11",
