@@ -39,6 +39,8 @@ app.use('/api/historico', historicoRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/projects', require('./routes/reportingRoutes'));
 app.use('/api/projects', require('./routes/exportRoutes')); // v0.3.0
+app.use('/api/projects', require('./routes/auditRoutes'));  // v0.3.1
+
 
 
 
