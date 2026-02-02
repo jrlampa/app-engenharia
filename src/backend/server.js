@@ -36,30 +36,28 @@ app.use('/api', historyRoutes);
 app.use(errorHandler);
 
 
-// Função de inicialização e automação no boot
-async function bootstrap() {
+// Função de inicialização atômica no boot
+async function startServer() {
   try {
-    logger.info("Iniciando verificação de integridade de dados...");
+    logger.info("Iniciando bootstrap do sistema...");
 
     // 1. Inicializa Banco de Dados e Migrações
     require('./db/client');
 
-    // 2. Sincronização Inteligente CSV -> SQLite (Cache Warmup + Watcher)
+    // 2. Sincroniza CSV com SQLite no boot (Garante integridade antes de aceitar conexões)
     await initializeMaterialsCache();
 
-    logger.info("Base de dados de materiais atualizada.");
-
-    // 3. Inicia o Servidor
     app.listen(5000, () => {
-      logger.info("Backend modularizado rodando na porta 5000 (cache ativo).");
+      logger.info("Backend de Engenharia v0.2.4 operando na porta 5000");
     });
 
   } catch (error) {
-    logger.error("Falha na sincronização inicial / Boot fail: " + error.message);
+    logger.error("Falha crítica no bootstrap: " + error.message);
     process.exit(1);
   }
 }
 
-// Executa o gatilho de boot
-bootstrap();
+// Executa o servidor
+startServer();
+
 
