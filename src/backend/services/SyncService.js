@@ -2,67 +2,108 @@ const fs = require('fs');
 const path = require('path');
 const csv = require('csv-parser');
 const { db, sqlite } = require('../db/client');
-const { materiais } = require('../db/schema');
+const { materiais, metadadosSync } = require('../db/schema');
+const { eq } = require('drizzle-orm');
 const logger = require('../utils/logger');
 
 const DATA_DIR = path.join(__dirname, '../data');
 
 /**
  * DOCUMENTAÇÃO: Serviço de Sincronização CSV -> SQLite.
- * Realiza a leitura e persistência dos kits de materiais.
+ * Implementa cache por data de modificação (mtime) para máxima eficiência.
  */
 class SyncService {
   /**
+   * Verifica se o arquivo precisa ser sincronizado comparando o mtime.
+   */
+  static async checkNeedsSync(filePath) {
+    try {
+      if (!fs.existsSync(filePath)) return false;
+
+      const stats = fs.statSync(filePath);
+      const currentMtime = stats.mtime.toISOString();
+      const fileName = path.basename(filePath);
+
+      // Consulta via Drizzle (Padrão Sênior)
+      const record = await db.select()
+        .from(metadadosSync)
+        .where(eq(metadadosSync.chave, `SYNC_MTIME_${fileName}`))
+        .execute();
+
+      if (record.length > 0 && record[0].valor === currentMtime) {
+        return false; // Já sincronizado
+      }
+
+      return currentMtime;
+    } catch (error) {
+      logger.error(`Erro ao verificar mtime: ${error.message}`);
+      return false;
+    }
+  }
+
+  /**
    * Gatilho principal de sincronização.
-   * Verifica mudanças no CSV e reconstrói a tabela de materiais se necessário.
    */
   static async syncMaterialsWithDB() {
     try {
       const files = fs.readdirSync(DATA_DIR).filter(f => f.endsWith('.csv'));
 
       if (files.length === 0) {
-        logger.warn('Nenhum arquivo CSV encontrado na pasta data.');
+        logger.warn('Nenhum arquivo CSV encontrado para sincronização.');
         return;
       }
 
-      // Inteligência de Cache (Hash de mtime)
-      let stateHash = "";
-      const fileStats = files.map(file => {
+      let somethingChanged = false;
+      const fileDataToSync = [];
+
+      for (const file of files) {
         const fullPath = path.join(DATA_DIR, file);
-        const stats = fs.statSync(fullPath);
-        stateHash += `${file}:${stats.mtimeMs};`;
-        return { file, fullPath };
-      });
+        const needsSync = await this.checkNeedsSync(fullPath);
 
-      const lastHash = sqlite.prepare('SELECT value FROM sync_metadata WHERE key = ?').get('global_csv_state');
+        if (needsSync) {
+          somethingChanged = true;
+          fileDataToSync.push({ file, fullPath, mtime: needsSync });
+        }
+      }
 
-      if (lastHash && lastHash.value === stateHash) {
-        logger.info('Base de dados de materiais íntegra e atualizada.');
+      if (!somethingChanged) {
+        logger.info('Base de dados de materiais já está atualizada (Cache MTIME).');
         return;
       }
 
-      logger.info("Sincronizando materiais (CSV -> SQLite)...");
+      logger.info("Mudanças detectadas nos CSVs. Iniciando reconstrução da base...");
 
-      const allRows = [];
-      for (const item of fileStats) {
+      let allMaterials = [];
+      for (const item of fileDataToSync) {
         const rows = await this.parseCSV(item.fullPath);
-        allRows.push(...rows);
+        allMaterials.push(...rows);
       }
 
-      // Transação Atômica via Drizzle
-      await db.transaction(async (tx) => {
-        await tx.delete(materiais).execute();
-        if (allRows.length > 0) {
-          await tx.insert(materiais).values(allRows).execute();
+      // No better-sqlite3, transações do Drizzle são síncronas
+      db.transaction((tx) => {
+        tx.delete(materiais).execute();
+
+        if (allMaterials.length > 0) {
+          tx.insert(materiais).values(allMaterials).execute();
         }
-        // Atualiza metadado de sincronização via better-sqlite3 (mais direto para metadados simples)
-        sqlite.prepare('INSERT OR REPLACE INTO sync_metadata (key, value) VALUES (?, ?)').run('global_csv_state', stateHash);
+
+        // Atualiza os metadados para cada arquivo sincronizado
+        for (const item of fileDataToSync) {
+          tx.insert(metadadosSync)
+            .values({ chave: `SYNC_MTIME_${item.file}`, valor: item.mtime })
+            .onConflictDoUpdate({
+              target: metadadosSync.chave,
+              set: { valor: item.mtime }
+            })
+            .execute();
+        }
       });
 
-      logger.info(`Concluído: ${allRows.length} materiais importados.`);
+
+      logger.info(`Sincronização inteligente concluída.`);
 
     } catch (error) {
-      logger.error(`Erro no SyncService: ${error.message}`);
+      logger.error(`Falha no SyncService de v0.2.4: ${error.message}`);
       throw error;
     }
   }
@@ -82,7 +123,6 @@ class SyncService {
           const descricao = row[2] ? row[2].trim() : "";
           const qtd = row[3] ? row[3].trim() : "";
 
-          // Detecção de Kit
           if (identificador && identificador.includes('BRAÇO J') && !descricao) {
             kitAtual = identificador;
             return;

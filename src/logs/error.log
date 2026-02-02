@@ -20,3 +20,17 @@
 {"env":"development","error":"syncDatabase is not a function","level":"error","message":"Intelligent sync failed","service":"app-engenharia-backend","timestamp":"2026-02-01 21:58:08"}
 {"env":"development","error":"syncDatabase is not a function","level":"error","message":"Intelligent sync failed","service":"app-engenharia-backend","timestamp":"2026-02-01 21:58:08"}
 {"env":"development","error":"syncDatabase is not a function","level":"error","message":"Intelligent sync failed","service":"app-engenharia-backend","timestamp":"2026-02-01 21:58:08"}
+{"env":"development","level":"error","message":"Falha no SyncService de v0.2.4: Transaction function cannot return a promise","service":"app-engenharia-backend","timestamp":"2026-02-01 22:40:39"}
+{"env":"development","level":"error","message":"Falha no SyncService de v0.2.4: Transaction function cannot return a promise","service":"app-engenharia-backend","timestamp":"2026-02-01 22:40:39"}
+{"env":"development","level":"error","message":"Falha no SyncService de v0.2.4: Transaction function cannot return a promise","service":"app-engenharia-backend","timestamp":"2026-02-01 22:40:39"}
+{"env":"development","level":"error","message":"Falha no SyncService de v0.2.4: Transaction function cannot return a promise","service":"app-engenharia-backend","timestamp":"2026-02-01 22:40:39"}
+{"env":"development","level":"error","message":"Falha no SyncService de v0.2.4: Transaction function cannot return a promise","service":"app-engenharia-backend","timestamp":"2026-02-01 22:40:39"}
+{"env":"development","level":"error","message":"Falha no SyncService de v0.2.4: Transaction function cannot return a promise","service":"app-engenharia-backend","timestamp":"2026-02-01 22:40:39"}
+{"env":"development","level":"error","message":"Falha no SyncService de v0.2.4: Transaction function cannot return a promise","service":"app-engenharia-backend","timestamp":"2026-02-01 22:40:39"}
+{"env":"development","level":"error","message":"Falha no SyncService de v0.2.4: Transaction function cannot return a promise","service":"app-engenharia-backend","timestamp":"2026-02-01 22:40:39"}
+{"env":"development","level":"error","message":"Falha no SyncService de v0.2.4: Transaction function cannot return a promise","service":"app-engenharia-backend","timestamp":"2026-02-01 22:40:39"}
+{"env":"development","level":"error","message":"Falha no SyncService de v0.2.4: Transaction function cannot return a promise","service":"app-engenharia-backend","timestamp":"2026-02-01 22:40:39"}
+{"env":"development","level":"error","message":"Falha no SyncService de v0.2.4: Transaction function cannot return a promise","service":"app-engenharia-backend","timestamp":"2026-02-01 22:40:39"}
+{"env":"development","level":"error","message":"Falha no SyncService de v0.2.4: Transaction function cannot return a promise","service":"app-engenharia-backend","timestamp":"2026-02-01 22:40:39"}
+{"env":"development","level":"error","message":"Falha no SyncService de v0.2.4: Transaction function cannot return a promise","service":"app-engenharia-backend","timestamp":"2026-02-01 22:40:39"}
+{"env":"development","level":"error","message":"Falha no SyncService de v0.2.4: Transaction function cannot return a promise","service":"app-engenharia-backend","timestamp":"2026-02-01 22:40:46"}

@@ -63,11 +63,12 @@ const materiais = sqliteTable('materiais', {
 });
 
 
-// Sync Metadata table
-const syncMetadata = sqliteTable('sync_metadata', {
-  key: text('key').primaryKey(),
-  value: text('value').notNull()
+// Metadados de Sincronização (v0.2.4)
+const metadadosSync = sqliteTable('metadados_sync', {
+  chave: text('chave').primaryKey(),
+  valor: text('valor').notNull()
 });
 
-module.exports = { projects, calculosTracao, calculosTensao, materiais, syncMetadata, historicoCalculos };
+module.exports = { projects, calculosTracao, calculosTensao, materiais, metadadosSync, historicoCalculos };
+
 

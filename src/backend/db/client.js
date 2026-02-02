@@ -81,20 +81,19 @@ const initializeDatabase = () => {
     `);
 
 
-    // Create historico_calculos table (v0.2.4)
+    // Create metadados_sync table (v0.2.4)
     sqlite.exec(`
-      CREATE TABLE IF NOT EXISTS historico_calculos (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        project_id INTEGER,
-        tipo TEXT NOT NULL,
-        data_execucao TEXT DEFAULT CURRENT_TIMESTAMP,
-        inputs TEXT NOT NULL,
-        resultados TEXT NOT NULL,
-        FOREIGN KEY (project_id) REFERENCES projects(id)
+      CREATE TABLE IF NOT EXISTS metadados_sync (
+        chave TEXT PRIMARY KEY,
+        valor TEXT NOT NULL
       )
     `);
 
+    // Migração: Se a tabela antiga existe, removemos (opcional, mas limpa o banco)
+    sqlite.exec(`DROP TABLE IF EXISTS sync_metadata`);
+
     logger.info('Database tables created/verified successfully');
+
 
 
   } catch (error) {
