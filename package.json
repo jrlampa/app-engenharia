@@ -1,6 +1,6 @@
 {
   "name": "app-engenharia",
-  "version": "1.0.0",
+  "version": "0.3.6",
   "description": "Application for engineering calculations",
   "main": "src/electron/main.js",
   "scripts": {
