@@ -81,10 +81,21 @@ class SyncService {
 
       // No better-sqlite3, transações do Drizzle são síncronas
       db.transaction((tx) => {
-        tx.delete(materiais).execute();
-
+        // v0.3.5: Usar UPSERT em vez de DELETE para preservar preços manuais
         if (allMaterials.length > 0) {
-          tx.insert(materiais).values(allMaterials).execute();
+          for (const mat of allMaterials) {
+            tx.insert(materiais)
+              .values(mat)
+              .onConflictDoUpdate({
+                target: [materiais.kit_nome, materiais.codigo],
+                set: {
+                  item: mat.item,
+                  quantidade: mat.quantidade
+                  // Não sobrescrevemos precoUnitario aqui pois o CSV v0.3.5 ainda não o possui
+                }
+              })
+              .execute();
+          }
         }
 
         // Atualiza os metadados para cada arquivo sincronizado
@@ -98,6 +109,7 @@ class SyncService {
             .execute();
         }
       });
+
 
 
       logger.info(`Sincronização inteligente concluída.`);

@@ -52,4 +52,21 @@ const getProjectAnalytics = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { downloadExcel, getProjectAnalytics, downloadPdf };
+/**
+ * Retorna orçamento do projeto.
+ * GET /api/projects/:id/budget
+ */
+const getBudget = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const BudgetService = require('../services/BudgetService');
+
+  const budget = await BudgetService.calculateProjectBudget(parseInt(id));
+
+  res.json({
+    sucesso: true,
+    budget: budget
+  });
+});
+
+module.exports = { downloadExcel, getProjectAnalytics, downloadPdf, getBudget };
+

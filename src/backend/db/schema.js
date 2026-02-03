@@ -48,14 +48,21 @@ const historicoCalculos = sqliteTable('historico_calculos', {
 /**
  * DOCUMENTAÇÃO: Schema de Materiais.
  * Armazena a estrutura dos kits extraída do CSV para consultas relacionais.
+ * v0.3.4: Adiciona campos de precificação.
  */
 const materiais = sqliteTable('materiais', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   kit_nome: text('kit_nome').notNull(), // Ex: CE2 BRAÇO J
   codigo: text('codigo').notNull(),     // Ex: F-4/13
   item: text('item').notNull(),         // Descrição do material
-  quantidade: real('quantidade').notNull() // Quantidade para o kit
-});
+  quantidade: real('quantidade').notNull(), // Quantidade para o kit
+  precoUnitario: real('preco_unitario'), // v0.3.4: Preço unitário
+  moeda: text('moeda').default('EUR')    // v0.3.4: Moeda
+}, (table) => ({
+  unq: uniqueIndex('materiais_kit_codigo_idx').on(table.kit_nome, table.codigo)
+}));
+
+
 
 
 // Metadados de Sincronização (v0.2.4)
@@ -96,7 +103,16 @@ const projects = sqliteTable('projects', {
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`)
 });
 
-module.exports = { projects, calculosTracao, calculosTensao, materiais, metadadosSync, historicoCalculos, settings, clients };
+// Rastreabilidade de Preços (v0.3.5)
+const historicoPrecos = sqliteTable('historico_precos', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  materialId: integer('material_id').references(() => materiais.id, { onDelete: 'cascade' }),
+  precoAntigo: real('preco_antigo'),
+  precoNovo: real('preco_novo').notNull(),
+  dataAlteracao: text('data_alteracao').default(sql`CURRENT_TIMESTAMP`)
+});
+
+module.exports = { projects, calculosTracao, calculosTensao, materiais, metadadosSync, historicoCalculos, settings, clients, historicoPrecos };
 
 
 
