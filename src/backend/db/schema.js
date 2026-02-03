@@ -92,13 +92,24 @@ const clients = sqliteTable('clients', {
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`)
 });
 
-// Projetos (Atualizado v0.3.3)
+// Perfis de Branding (v0.3.8) - SaaS e Multi-tema
+const brandingProfiles = sqliteTable('branding_profiles', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  nome: text('nome').notNull(),
+  configJson: text('config_json').notNull(), // JSON com os Design Tokens Universais
+  isDefault: integer('is_default').default(0),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`)
+});
+
+// Projetos (Atualizado v0.3.8)
 const projects = sqliteTable('projects', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   name: text('name').notNull(),
   description: text('description'),
   client: text('client'), // Mantido para legado
   clientId: integer('client_id').references(() => clients.id), // Nova FK
+  brandingProfileId: integer('branding_profile_id').references(() => brandingProfiles.id), // v0.3.8
+  statusFinanceiro: text('status_financeiro').default('SAUDAVEL'), // v0.3.8: 'SAUDAVEL', 'RISCO', 'ALERTA'
   location: text('location'),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`)
 });
@@ -112,7 +123,8 @@ const historicoPrecos = sqliteTable('historico_precos', {
   dataAlteracao: text('data_alteracao').default(sql`CURRENT_TIMESTAMP`)
 });
 
-module.exports = { projects, calculosTracao, calculosTensao, materiais, metadadosSync, historicoCalculos, settings, clients, historicoPrecos };
+
+module.exports = { projects, calculosTracao, calculosTensao, materiais, metadadosSync, historicoCalculos, settings, clients, historicoPrecos, brandingProfiles };
 
 
 

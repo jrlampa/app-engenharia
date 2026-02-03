@@ -28,4 +28,17 @@ const getTopClients = asyncHandler(async (req, res) => {
   res.json({ sucesso: true, top });
 });
 
-module.exports = { getProjectTrends, getCostTrends, getTopClients };
+const PredictorService = require('../services/PredictorService');
+
+/**
+ * Retorna análise de risco financeiro (v0.3.8).
+ * GET /api/analytics/projects/:id/risk
+ */
+const getProjectRisk = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const risk = await PredictorService.calculateMarginDelta(parseInt(id));
+  res.json({ sucesso: true, risk });
+});
+
+module.exports = { getProjectTrends, getCostTrends, getTopClients, getProjectRisk };
+

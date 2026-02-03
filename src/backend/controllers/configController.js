@@ -17,4 +17,14 @@ const updateConfig = asyncHandler(async (req, res) => {
   res.json({ sucesso: true, config: updated });
 });
 
-module.exports = { getConfig, updateConfig };
+const themes = require('../config/exportThemes');
+
+// Obter Design Tokens Universais (v0.3.8)
+const getUITokens = asyncHandler(async (req, res) => {
+  const themeName = req.query.theme || 'default';
+  const tokens = themes[themeName] || themes.default;
+  res.json({ sucesso: true, tokens });
+});
+
+module.exports = { getConfig, updateConfig, getUITokens };
+
