@@ -18,11 +18,17 @@ class ConfigService {
       if (current.length === 0) {
         // Inicializa com padrão se vazio
         const [inserted] = await db.insert(settings)
-          .values({}) // Usa defaults do schema
+          .values({
+            empresaNome: 'Minha Empresa de Engenharia',
+            corPrimaria: '#007bff',
+            engenheiroResponsavel: 'Engenheiro Chefe'
+            // Moeda agora é BRL por padrão no schema
+          })
           .returning()
           .execute();
         return inserted;
       }
+
 
       return current[0];
     } catch (error) {

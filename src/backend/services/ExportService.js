@@ -1,125 +1,61 @@
 const ExcelJS = require('exceljs');
 const ReportingService = require('./ReportingService');
-const { db } = require('../db/client');
-const { projects } = require('../db/schema');
-const { eq } = require('drizzle-orm');
+const DataTransformer = require('../utils/DataTransformer');
 const logger = require('../utils/logger');
 
 /**
- * Service para Exportação de Dados Profissionais (Excel/BOM).
- * Transforma dados do sistema em planilhas formatadas para o setor de compras.
+ * Service para Exportação de Dados em Excel (v0.3.6 - Stream Edition).
+ * Focado em performance para grandes volumes de dados.
  */
 class ExportService {
   /**
-   * Gera um arquivo Excel (.xlsx) completo do projeto.
-   * Contém abas: "Resumo" e "Lista de Materiais".
-   * 
+   * Gera o Stream do arquivo Excel do projeto.
    * @param {number} projectId 
-   * @returns {Promise<Buffer>} Buffer do arquivo Excel
+   * @param {Stream} res - Express response stream
    */
-  static async generateProjectExcel(projectId) {
+  static async streamProjectExcel(projectId, res) {
     try {
-      // 1. Obter dados via ReportingService (Reutilização inteligente)
-      const reportData = await ReportingService.generateMaterialReport(projectId);
-      const { projeto, totalCalculos, materiaisConsolidados } = reportData;
+      const report = await ReportingService.generateMaterialReport(projectId);
+      const data = DataTransformer.transformMaterialsForExport(report.materiaisConsolidados);
 
-      // 2. Criar Workbook
-      const workbook = new ExcelJS.Workbook();
-      workbook.creator = 'Engenharia Pro System';
-      workbook.lastModifiedBy = 'Engenharia Backend v0.3.0';
-      workbook.created = new Date();
-      workbook.modified = new Date();
+      const options = {
+        stream: res, // Pipe direto para o response
+        useStyles: true,
+        useSharedStrings: true
+      };
 
-      // --- ABA 1: RESUMO DO PROJETO ---
-      const sheetResumo = workbook.addWorksheet('Visão Geral', { tabColor: { argb: 'FF007ACC' } }); // Azul Tech
+      const workbook = new ExcelJS.stream.xlsx.WorkbookWriter(options);
+      const sheet = workbook.addWorksheet('Lista de Materiais');
 
-      // Estilização de Título
-      sheetResumo.mergeCells('B2:E2');
-      const titleCell = sheetResumo.getCell('B2');
-      titleCell.value = `Relatório Técnico: ${projeto.name}`;
-      titleCell.font = { name: 'Arial', size: 16, bold: true, color: { argb: 'FFFFFFFF' } };
-      titleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2C3E50' } };
-      titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
-
-      // Dados do Projeto
-      sheetResumo.getCell('B4').value = "Cliente:";
-      sheetResumo.getCell('C4').value = projeto.client || "N/A";
-
-      sheetResumo.getCell('B5').value = "Localização:";
-      sheetResumo.getCell('C5').value = projeto.location || "N/A";
-
-      sheetResumo.getCell('B6').value = "Total de Cálculos:";
-      sheetResumo.getCell('C6').value = totalCalculos;
-
-      sheetResumo.getCell('B7').value = "Data de Emissão:";
-      sheetResumo.getCell('C7').value = new Date().toLocaleString('pt-BR');
-
-      // Ajuste de largura
-      sheetResumo.getColumn('B').width = 20;
-      sheetResumo.getColumn('C').width = 40;
-
-
-      // --- ABA 2: LISTA DE MATERIAIS (bill of materials) ---
-      const sheetBOM = workbook.addWorksheet('Lista de Materiais', { tabColor: { argb: 'FF27AE60' } }); // Verde Sucesso
-
-      // Cabeçalhos Profissionais
-      sheetBOM.columns = [
-        { header: 'Item', key: 'idx', width: 10 },
-        { header: 'Código', key: 'code', width: 15 },
-        { header: 'Descrição do Material', key: 'desc', width: 50 },
-        { header: 'Qtd.', key: 'qtd', width: 12 },
-        { header: 'Unid.', key: 'unid', width: 10 },
+      // 1. Configurar Colunas
+      sheet.columns = [
+        { header: 'CÓDIGO', key: 'Codigo', width: 15 },
+        { header: 'DESCRIÇÃO', key: 'Descricao', width: 50 },
+        { header: 'QUANTIDADE', key: 'Quantidade', width: 15 },
+        { header: 'UNIDADE', key: 'Unidade', width: 10 },
+        { header: 'PREÇO UNIT (R$)', key: 'PrecoUnitario', width: 18 },
+        { header: 'SUBTOTAL (R$)', key: 'Subtotal', width: 18 }
       ];
 
-      // Estilo do Cabeçalho
-      const headerRow = sheetBOM.getRow(1);
-      headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' } };
-      headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2980B9' } };
-      headerRow.alignment = { horizontal: 'center' };
+      // Estilo Header
+      sheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+      sheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF007BFF' } };
 
-      // Preenchimento dos Dados
-      materiaisConsolidados.forEach((mat, index) => {
-        const row = sheetBOM.addRow({
-          idx: index + 1,
-          code: mat.codigo,
-          desc: mat.item,
-          qtd: mat.quantidade,
-          unid: mat.unidade || 'UN'
-        });
-
-        // Alternar cores (Zebra striping) para legibilidade
-        if (index % 2 !== 0) {
-          row.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF2F2F2' } };
-        }
-
-        row.getCell('qtd').alignment = { horizontal: 'center' };
-        row.getCell('unid').alignment = { horizontal: 'center' };
-        row.getCell('idx').alignment = { horizontal: 'center' };
+      // 2. Adicionar Linhas por Stream
+      data.forEach(row => {
+        sheet.addRow(row).commit(); // Commit envia pro stream e libera RAM
       });
 
-      // Bordas
-      sheetBOM.eachRow((row) => {
-        row.eachCell((cell) => {
-          cell.border = {
-            top: { style: 'thin' },
-            left: { style: 'thin' },
-            bottom: { style: 'thin' },
-            right: { style: 'thin' }
-          };
-        });
-      });
-
-      // 3. Gerar Buffer
-      const buffer = await workbook.xlsx.writeBuffer();
-      logger.info(`Excel gerado para Projeto #${projectId} (${buffer.byteLength} bytes).`);
-
-      return buffer;
-
+      // 3. Finalizar
+      await workbook.commit();
+      logger.info(`Excel gerado via Stream para Projeto #${projectId}`);
     } catch (error) {
-      logger.error(`Erro ao gerar Excel: ${error.message}`);
+      logger.error(`Erro ao exportar Excel (Stream): ${error.message}`);
       throw error;
     }
   }
+
+  // Depreciado: generateProjectExcel (Buffer version). Mantido para compatibilidade se necessário.
 }
 
 module.exports = ExportService;

@@ -57,7 +57,7 @@ const materiais = sqliteTable('materiais', {
   item: text('item').notNull(),         // Descrição do material
   quantidade: real('quantidade').notNull(), // Quantidade para o kit
   precoUnitario: real('preco_unitario'), // v0.3.4: Preço unitário
-  moeda: text('moeda').default('EUR')    // v0.3.4: Moeda
+  moeda: text('moeda').default('BRL')    // v0.3.6: Moeda (R$)
 }, (table) => ({
   unq: uniqueIndex('materiais_kit_codigo_idx').on(table.kit_nome, table.codigo)
 }));

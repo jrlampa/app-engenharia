@@ -1,113 +1,104 @@
 const PDFDocument = require('pdfkit');
 const ConfigService = require('./ConfigService');
 const ReportingService = require('./ReportingService');
+const YieldService = require('./YieldService');
+const DataTransformer = require('../utils/DataTransformer');
 const logger = require('../utils/logger');
 
 /**
- * Service para Geração de PDF Profissional.
- * Desenha relatórios vetoriais com marca e layout oficial.
+ * Service para Geração de PDF Profissional (v0.3.6 - Executive & Stream).
  */
 class PdfService {
   /**
-   * Gera o PDF completo do projeto.
+   * Gera o Stream do PDF completo do projeto.
    * @param {number} projectId 
-   * @returns {Promise<Buffer>} Buffer do PDF
+   * @param {Stream} res - Express response stream
    */
-  static async generateProjectPdf(projectId) {
+  static async streamProjectPdf(projectId, res) {
     try {
-      // 1. Dados
       const config = await ConfigService.getConfig();
       const report = await ReportingService.generateMaterialReport(projectId);
-      const { projeto, materiaisConsolidados } = report;
+      const yieldData = await YieldService.calculateVariance(projectId);
 
-      // 2. Setup do Documento
-      const doc = new PDFDocument({ margin: 50, size: 'A4' });
-      const buffers = [];
+      const doc = new PDFDocument({ margin: 50, size: 'A4', bufferPages: true });
+      doc.pipe(res); // Pipe direto pro response
 
-      doc.on('data', buffers.push.bind(buffers));
+      // --- PÁGINA 1: EXECUTIVE SUMMARY (RESUMO VISUAL) ---
+      this.drawHeader(doc, config, "RESUMO EXECUTIVO");
 
-      return new Promise((resolve, reject) => {
-        doc.on('end', () => resolve(Buffer.concat(buffers)));
-        doc.on('error', reject);
+      doc.moveDown(4);
+      doc.fontSize(18).fillColor('#333').text("Visão Geral do Investimento", { align: 'center' });
+      doc.moveDown(2);
 
-        // --- CABEÇALHO ---
-        // Fundo do Topo
-        doc.rect(0, 0, 595.28, 100).fill(config.corPrimaria || '#007bff');
+      // Caixa de Resumo Financeiro
+      const boxTop = doc.y;
+      doc.rect(50, boxTop, 500, 100).fill('#f8f9fa').stroke('#dee2e6');
 
-        // Título
-        doc.fillColor('white')
-          .fontSize(20)
-          .text(config.empresaNome, 50, 35);
+      doc.fillColor('#000').fontSize(12);
+      doc.text("TOTAL ESTIMADO:", 70, boxTop + 20);
+      doc.fontSize(24).fillColor('#007bff').text(DataTransformer.formatCurrency(yieldData.totalReal), 70, boxTop + 40);
 
-        doc.fontSize(10)
-          .text(`Projeto: ${projeto.name}`, 50, 65)
-          .text(`Local: ${projeto.location || 'N/A'}`, 50, 78);
+      doc.fillColor('#666').fontSize(10);
+      doc.text("STATUS DA MARGEM:", 300, boxTop + 20);
+      doc.fillColor('#28a745').fontSize(14).text("OTIMIZADO", 300, boxTop + 40);
+      doc.fillColor('#666').fontSize(9).text(`VARIANCIA: ${yieldData.percentualDesperdicio} vs Ideal`, 300, boxTop + 60);
 
-        // --- CORPO ---
-        doc.fillColor('black').moveDown(4);
+      doc.moveDown(6);
+      doc.fillColor('#000').fontSize(14).text("Notas Técnicas & ROI", { underline: true });
+      doc.moveDown(0.5);
+      doc.fontSize(10).text(yieldData.sugestao);
+      doc.moveDown(2);
+      doc.text(`Responsável Técnico: ${config.engenheiroResponsavel}`);
 
-        doc.fontSize(14).text("Resumo Técnico", { underline: true });
-        doc.moveDown(0.5);
-        doc.fontSize(10)
-          .text(`Cliente: ${projeto.client || 'N/A'}`)
-          .text(`Data Emissão: ${new Date().toLocaleDateString('pt-BR')}`)
-          .text(`Engenheiro Resp.: ${config.engenheiroResponsavel}`)
-          .moveDown(2);
+      // --- PÁGINA 2+: LISTA DE MATERIAIS ---
+      doc.addPage();
+      this.drawHeader(doc, config, "DETALHAMENTO TÉCNICO");
+      doc.moveDown(4);
 
-        // --- TABELA DE MATERIAIS ---
-        doc.fontSize(14).text("Lista de Materiais Consolidada", { underline: true });
-        doc.moveDown(1);
+      // Tabela (Simplified for Stream)
+      doc.fontSize(14).text("Lista de Materiais Consolidada");
+      doc.moveDown(1);
 
-        // Headers Tabela
-        let y = doc.y;
-        const xCode = 50, xDesc = 150, xQtd = 450, xUn = 520;
+      let y = doc.y;
+      const xCode = 50, xDesc = 150, xQtd = 450, xUn = 520;
+      doc.fontSize(10).font('Helvetica-Bold').text('CÓDIGO', xCode, y);
+      doc.text('DESCRIÇÃO', xDesc, y);
+      doc.text('QTD.', xQtd, y, { width: 50, align: 'right' });
 
-        doc.fontSize(10).font('Helvetica-Bold');
-        doc.text('CÓDIGO', xCode, y);
-        doc.text('DESCRIÇÃO', xDesc, y);
-        doc.text('QTD.', xQtd, y, { width: 50, align: 'right' });
-        doc.text('UN.', xUn, y);
+      doc.moveTo(50, y + 15).lineTo(550, y + 15).stroke();
+      doc.moveDown(1.5).font('Helvetica');
 
-        doc.moveTo(50, y + 15).lineTo(550, y + 15).stroke();
-        doc.moveDown(1.5);
-
-        // Linhas
-        doc.font('Helvetica').fontSize(9);
-
-        materiaisConsolidados.forEach((item, i) => {
-          // Zebra background
-          if (i % 2 === 0) {
-            doc.rect(50, doc.y - 2, 500, 15).fillColor('#f5f5f5').fill();
-            doc.fillColor('black'); // Reset text color
-          }
-
-          y = doc.y;
-          doc.text(item.codigo, xCode, y);
-          doc.text(item.item.substring(0, 60), xDesc, y);
-          doc.text(item.quantidade.toString(), xQtd, y, { width: 50, align: 'right' });
-          doc.text(item.unidade || 'UN', xUn, y);
-
-          doc.moveDown(0.8);
-        });
-
-        // Rodapé
-        const pages = doc.bufferedPageRange();
-        for (let i = 0; i < pages.count; i++) {
-          doc.switchToPage(i);
-          doc.fontSize(8).fillColor('grey')
-            .text(`Gerado por SisEngenharia Pro v0.3.2 - Página ${i + 1}`,
-              50,
-              doc.page.height - 30,
-              { align: 'center', width: 500 });
+      report.materiaisConsolidados.forEach((item, i) => {
+        if (doc.y > 750) {
+          doc.addPage();
+          this.drawHeader(doc, config, "DETALHAMENTO TÉCNICO (CONT.)");
+          doc.moveDown(4);
         }
-
-        doc.end();
+        y = doc.y;
+        doc.fontSize(9).text(item.codigo, xCode, y);
+        doc.text(DataTransformer.cleanString(item.item.substring(0, 55)), xDesc, y);
+        doc.text(item.quantidade.toString(), xQtd, y, { width: 50, align: 'right' });
+        doc.moveDown(0.8);
       });
 
+      // Rodapé
+      const pages = doc.bufferedPageRange();
+      for (let i = 0; i < pages.count; i++) {
+        doc.switchToPage(i);
+        doc.fontSize(8).fillColor('grey').text(`Gerado por SisEngenharia Pro v0.3.6 - Página ${i + 1}`, 50, doc.page.height - 30, { align: 'center', width: 500 });
+      }
+
+      doc.end();
     } catch (error) {
-      logger.error(`Erro ao gerar PDF: ${error.message}`);
+      logger.error(`Erro ao gerar PDF (Stream): ${error.message}`);
       throw error;
     }
+  }
+
+  static drawHeader(doc, config, subtitle) {
+    doc.rect(0, 0, 595.28, 80).fill(config.corPrimaria || '#007bff');
+    doc.fillColor('white').fontSize(20).text(config.empresaNome, 50, 25);
+    doc.fontSize(10).text(subtitle, 50, 50);
   }
 }
 
