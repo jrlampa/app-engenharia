@@ -111,10 +111,11 @@ class PdfService {
   }
 
   static drawHeader(doc, config, subtitle) {
-    doc.rect(0, 0, 595.28, 70).fill(themes.primary); // Usa tema centralizado
-    doc.fillColor(themes.text.white).fontSize(16).font(themes.fonts.header).text(config.empresaNome, 50, 20);
-    doc.fontSize(9).font(themes.fonts.body).text(subtitle, 50, 42);
+    doc.rect(0, 0, 595.28, 70).fill('#' + themes.colors.primary.substring(2)); // Remove FF prefix for PDF
+    doc.fillColor(themes.colors.textHeader === 'FFFFFFFF' ? 'white' : 'black').fontSize(themes.fonts.sizeTitle).font(themes.fonts.main).text(config.empresaNome, 50, 20);
+    doc.fontSize(9).font(themes.fonts.main).text(subtitle, 50, 42);
   }
+
 }
 
 module.exports = PdfService;

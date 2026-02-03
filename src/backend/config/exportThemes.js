@@ -1,34 +1,27 @@
 /**
- * Configuração de Temas para Exportação (v0.3.6).
- * Centraliza cores, fontes e estilos para Excel e PDF.
+ * DOCUMENTAÇÃO: Configuração de Temas de Exportação (v0.3.7).
+ * Centraliza a identidade visual para facilitar o "White-label".
  */
 const exportThemes = {
   default: {
-    primary: '#1E293B', // Slate 800 - Profissional
-    secondary: '#007BFF', // Azul SisEngenharia
-    accent: '#28A745', // Verde Sucesso
-    danger: '#DC3545', // Vermelho Erro
-    warning: '#FFC107', // Amarelo Alerta
-    background: '#F8F9FA',
-    text: {
-      main: '#333333',
-      light: '#666666',
-      white: '#FFFFFF'
+    colors: {
+      primary: 'FF1E293B',    // Slate 800
+      accent: 'FF2563EB',     // Blue 600
+      success: 'FF10B981',    // Emerald 500
+      warning: 'FFF59E0B',    // Amber 500
+      textHeader: 'FFFFFFFF', // White
+      rowEven: 'FFF8FAFC',    // Slate 50
+      border: 'FFE2E8F0'      // Slate 200
     },
     fonts: {
-      header: 'Helvetica-Bold',
-      body: 'Helvetica'
+      main: 'Arial',
+      sizeHeader: 12,
+      sizeBody: 10,
+      sizeTitle: 16
     }
   },
   enterprise: {
-    primary: '#111827',
-    secondary: '#3B82F6',
-    accent: '#10B981',
-    text: {
-      main: '#1F2937',
-      light: '#4B5563',
-      white: '#FFFFFF'
-    }
+    // Espaço para temas customizados por cliente no futuro
   }
 };
 

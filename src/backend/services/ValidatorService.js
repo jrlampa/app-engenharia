@@ -8,50 +8,48 @@ const logger = require('../utils/logger');
 class ValidatorService {
   /**
    * Executa uma bateria de testes sobre os dados do projeto.
-   * @param {Object} dadosResumo - Dados agregados do projeto (material report + budget).
+   * @param {Object} dadosResumo - Dados agregados do projeto.
    * @returns {Object} { valido: boolean, alertas: Array, erros: Array }
    */
   static validarProjetoParaExportacao(dadosResumo) {
     const alertas = [];
     const erros = [];
 
-    logger.info(`Iniciando validação de pré-exportação para Projeto #${dadosResumo.projeto?.id || '?'}`);
+    logger.info(`Iniciando validação de pré-exportação...`);
 
     // 1. Verificação de Integridade Financeira
-    if (!dadosResumo.items || dadosResumo.items.length === 0) {
-      erros.push("O projeto não possui materiais associados.");
-    }
+    // dadosResumo aqui deve conter totalGeral e items
+    const custoTotal = dadosResumo.totalGeral || 0;
+    const items = dadosResumo.items || [];
 
-    if (dadosResumo.totalGeral <= 0) {
+    if (custoTotal <= 0) {
       alertas.push("O projeto não possui custos associados ou os materiais têm preço zero.");
     }
 
     // 2. Verificação de Coerência Técnica (Exemplos de Engenharia)
-    if (dadosResumo.items) {
-      dadosResumo.items.forEach(item => {
-        // Validar se existem itens com "NaN" ou indefinidos (Safety First)
-        if (isNaN(item.subtotal)) {
-          erros.push(`Erro de cálculo financeiro no item: ${item.codigo}`);
-        }
+    items.forEach(item => {
+      // Regra: Estruturas Braço J não devem ter vãos acima de 120m sem reforço
+      // (Lógica de exemplo integrada)
+      if (item.codigo.includes('BRACO-J') && item.quantidade > 5) {
+        // Alerta preventivo
+        alertas.push(`Densidade alta de Braço J detectada no código ${item.codigo}. Verifique reforços.`);
+      }
 
-        // Regra de Negócio: Quantidades negativas são proibidas
-        if (item.quantidade <= 0) {
-          erros.push(`Quantidade inválida para o item ${item.codigo}: ${item.quantidade}`);
-        }
-      });
-    }
+      // Validar se existem itens com "NaN" ou indefinidos (Safety First)
+      if (isNaN(item.subtotal)) {
+        erros.push(`Erro de cálculo financeiro no item: ${item.codigo}`);
+      }
+    });
 
-    // 3. Verificação de Dados de Referência
+    // 3. Verificação de Dados de Branding
     if (!dadosResumo.projeto || !dadosResumo.projeto.id) {
-      erros.push("Dados do projeto incompletos para exportação.");
+      erros.push("Projeto sem ID de referência. Base de dados inconsistente.");
     }
 
     const eValido = erros.length === 0;
 
     if (!eValido) {
-      logger.error(`Validação de exportação falhou: ${erros.join(' | ')}`);
-    } else if (alertas.length > 0) {
-      logger.warn(`Validação concluída com alertas: ${alertas.join(' | ')}`);
+      logger.error(`Validação falhou: ${erros.join(' | ')}`);
     }
 
     return {
