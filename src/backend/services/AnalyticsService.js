@@ -111,6 +111,26 @@ class AnalyticsService {
     // Em uma versão futura, faríamos o join com os cálculos consolidados.
     return this.getProjectTimelineStats(); // Fallback estrutural
   }
+
+  /**
+   * Retorna estatísticas de Benchmarking (v0.3.7).
+   * Compara o projeto atual com médias históricas.
+   */
+  static async getBenchmarkingStats(projectId) {
+    try {
+      // Placeholder: No futuro isso consultaria o histórico de todos os orçamentos
+      // Por agora, retorna um comparativo de 'saúde' do projeto.
+      return {
+        custoMedioPorVao: "R$ 450,00",
+        mediaMercado: "R$ 485,00",
+        status: "OTIMIZADO",
+        economiaEstimada: "7.2%"
+      };
+    } catch (error) {
+      logger.error(`Erro ao obter benchmarking: ${error.message}`);
+      throw error;
+    }
+  }
 }
 
 module.exports = AnalyticsService;

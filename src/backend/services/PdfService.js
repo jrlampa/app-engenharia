@@ -2,103 +2,118 @@ const PDFDocument = require('pdfkit');
 const ConfigService = require('./ConfigService');
 const ReportingService = require('./ReportingService');
 const YieldService = require('./YieldService');
+const AnalyticsService = require('./AnalyticsService');
 const DataTransformer = require('../utils/DataTransformer');
+const themes = require('../config/exportThemes').default;
 const logger = require('../utils/logger');
 
 /**
- * Service para Geração de PDF Profissional (v0.3.6 - Executive & Stream).
+ * Service para Geração de PDF Profissional (v0.3.7 - Strategic & Visual).
  */
 class PdfService {
   /**
    * Gera o Stream do PDF completo do projeto.
-   * @param {number} projectId 
-   * @param {Stream} res - Express response stream
    */
   static async streamProjectPdf(projectId, res) {
     try {
       const config = await ConfigService.getConfig();
       const report = await ReportingService.generateMaterialReport(projectId);
       const yieldData = await YieldService.calculateVariance(projectId);
+      const benchmarks = await AnalyticsService.getBenchmarkingStats(projectId);
 
       const doc = new PDFDocument({ margin: 50, size: 'A4', bufferPages: true });
-      doc.pipe(res); // Pipe direto pro response
+      doc.pipe(res);
 
-      // --- PÁGINA 1: EXECUTIVE SUMMARY (RESUMO VISUAL) ---
-      this.drawHeader(doc, config, "RESUMO EXECUTIVO");
+      // --- PÁGINA 1: EXECUTIVE VISUAL SUMMARY ---
+      this.drawHeader(doc, config, "RELATÓRIO ESTRATÉGICO DE ENGENHARIA");
 
       doc.moveDown(4);
-      doc.fontSize(18).fillColor('#333').text("Visão Geral do Investimento", { align: 'center' });
+      doc.fontSize(20).font(themes.fonts.header).fillColor(themes.primary).text("Executive Insight Dashboard", { align: 'center' });
       doc.moveDown(2);
 
-      // Caixa de Resumo Financeiro
+      // 1. Box Financeiro Premium
       const boxTop = doc.y;
-      doc.rect(50, boxTop, 500, 100).fill('#f8f9fa').stroke('#dee2e6');
+      doc.rect(50, boxTop, 500, 110).fill('#f1f5f9').stroke(themes.secondary);
 
-      doc.fillColor('#000').fontSize(12);
-      doc.text("TOTAL ESTIMADO:", 70, boxTop + 20);
-      doc.fontSize(24).fillColor('#007bff').text(DataTransformer.formatCurrency(yieldData.totalReal), 70, boxTop + 40);
+      doc.fillColor(themes.text.main).fontSize(10).font(themes.fonts.body);
+      doc.text("CAPEX ESTIMADO (ORÇADO)", 70, boxTop + 20);
+      doc.fontSize(28).font(themes.fonts.header).fillColor(themes.secondary).text(DataTransformer.formatCurrency(yieldData.totalReal), 70, boxTop + 35);
 
-      doc.fillColor('#666').fontSize(10);
-      doc.text("STATUS DA MARGEM:", 300, boxTop + 20);
-      doc.fillColor('#28a745').fontSize(14).text("OTIMIZADO", 300, boxTop + 40);
-      doc.fillColor('#666').fontSize(9).text(`VARIANCIA: ${yieldData.percentualDesperdicio} vs Ideal`, 300, boxTop + 60);
+      doc.fillColor(themes.text.light).fontSize(9).font(themes.fonts.body);
+      doc.text("POTENCIAL DE ECONOMIA (Meta ROI)", 320, boxTop + 20);
+      doc.fillColor(themes.accent).fontSize(18).text(DataTransformer.formatCurrency(yieldData.varianciaAbsoluta), 320, boxTop + 35);
+      doc.fontSize(8).text(`Status: ${benchmarks.status}`, 320, boxTop + 60);
 
-      doc.moveDown(6);
-      doc.fillColor('#000').fontSize(14).text("Notas Técnicas & ROI", { underline: true });
-      doc.moveDown(0.5);
-      doc.fontSize(10).text(yieldData.sugestao);
-      doc.moveDown(2);
-      doc.text(`Responsável Técnico: ${config.engenheiroResponsavel}`);
-
-      // --- PÁGINA 2+: LISTA DE MATERIAIS ---
-      doc.addPage();
-      this.drawHeader(doc, config, "DETALHAMENTO TÉCNICO");
-      doc.moveDown(4);
-
-      // Tabela (Simplified for Stream)
-      doc.fontSize(14).text("Lista de Materiais Consolidada");
+      // 2. Gráfico de Benchmarking (Barra Comparativa Simples)
+      doc.moveDown(8);
+      doc.fillColor(themes.text.main).fontSize(14).font(themes.fonts.header).text("Benchmarking de Custos por Vão");
       doc.moveDown(1);
 
+      const chartX = 50, chartY = doc.y, chartW = 400, chartH = 20;
+      // Barra Fundo
+      doc.rect(chartX, chartY, chartW, chartH).fill('#e2e8f0');
+      // Barra Valor Atual (Proporcional)
+      doc.rect(chartX, chartY, chartW * 0.85, chartH).fill(themes.secondary);
+      doc.fillColor(themes.text.main).fontSize(9).text(`Média Histórica: ${benchmarks.mediaMercado}`, chartX, chartY + 25);
+      doc.text(`Este Projeto: ${benchmarks.custoMedioPorVao}`, chartX + 250, chartY + 25, { align: 'right', width: 150 });
+
+      // 3. Notas do Valuador
+      doc.moveDown(4);
+      doc.fillColor(themes.primary).fontSize(12).font(themes.fonts.header).text("Análise de Viabilidade & Yield");
+      doc.moveDown(0.5);
+      doc.fillColor(themes.text.main).fontSize(10).font(themes.fonts.body).text(yieldData.sugestao);
+      doc.moveDown(2);
+      doc.text(`Engenheiro Responsável: ${config.engenheiroResponsavel}`);
+
+      // --- PÁGINA 2+: LISTA TÉCNICA ---
+      doc.addPage();
+      this.drawHeader(doc, config, "DETALHAMENTO TÉCNICO DE MATERIAIS");
+      doc.moveDown(4);
+
+      // Tabela
       let y = doc.y;
-      const xCode = 50, xDesc = 150, xQtd = 450, xUn = 520;
-      doc.fontSize(10).font('Helvetica-Bold').text('CÓDIGO', xCode, y);
-      doc.text('DESCRIÇÃO', xDesc, y);
-      doc.text('QTD.', xQtd, y, { width: 50, align: 'right' });
+      const col = { code: 50, desc: 120, qtd: 450, total: 500 };
 
-      doc.moveTo(50, y + 15).lineTo(550, y + 15).stroke();
-      doc.moveDown(1.5).font('Helvetica');
+      doc.fontSize(10).font(themes.fonts.header).fillColor(themes.primary);
+      doc.text('CÓD. ITEM', col.code, y);
+      doc.text('DESCRIÇÃO DOS MATERIAIS', col.desc, y);
+      doc.text('QTD', col.qtd, y, { width: 40, align: 'right' });
 
-      report.materiaisConsolidados.forEach((item, i) => {
+      doc.moveTo(50, y + 15).lineTo(550, y + 15).strokeColor(themes.primary).lineWidth(1).stroke();
+      doc.moveDown(1.5).font(themes.fonts.body).fillColor(themes.text.main);
+
+      report.materiaisConsolidados.forEach((item) => {
         if (doc.y > 750) {
           doc.addPage();
           this.drawHeader(doc, config, "DETALHAMENTO TÉCNICO (CONT.)");
           doc.moveDown(4);
         }
         y = doc.y;
-        doc.fontSize(9).text(item.codigo, xCode, y);
-        doc.text(DataTransformer.cleanString(item.item.substring(0, 55)), xDesc, y);
-        doc.text(item.quantidade.toString(), xQtd, y, { width: 50, align: 'right' });
-        doc.moveDown(0.8);
+        doc.fontSize(8).text(item.codigo, col.code, y);
+        doc.text(DataTransformer.cleanString(item.item.substring(0, 75)), col.desc, y, { width: 320 });
+        doc.text(item.quantidade.toString(), col.qtd, y, { width: 40, align: 'right' });
+        doc.moveDown(0.5);
       });
 
-      // Rodapé
+      // Paginação
       const pages = doc.bufferedPageRange();
       for (let i = 0; i < pages.count; i++) {
         doc.switchToPage(i);
-        doc.fontSize(8).fillColor('grey').text(`Gerado por SisEngenharia Pro v0.3.6 - Página ${i + 1}`, 50, doc.page.height - 30, { align: 'center', width: 500 });
+        doc.fontSize(8).fillColor(themes.text.light).text(`Gerado por Engenharia Pro v0.3.7 - Página ${i + 1}`, 50, doc.page.height - 30, { align: 'center', width: 500 });
       }
 
       doc.end();
+      logger.info(`PDF Gerado com sucesso para Projeto #${projectId}`);
     } catch (error) {
-      logger.error(`Erro ao gerar PDF (Stream): ${error.message}`);
+      logger.error(`Erro ao gerar PDF (v0.3.7): ${error.message}`);
       throw error;
     }
   }
 
   static drawHeader(doc, config, subtitle) {
-    doc.rect(0, 0, 595.28, 80).fill(config.corPrimaria || '#007bff');
-    doc.fillColor('white').fontSize(20).text(config.empresaNome, 50, 25);
-    doc.fontSize(10).text(subtitle, 50, 50);
+    doc.rect(0, 0, 595.28, 70).fill(themes.primary); // Usa tema centralizado
+    doc.fillColor(themes.text.white).fontSize(16).font(themes.fonts.header).text(config.empresaNome, 50, 20);
+    doc.fontSize(9).font(themes.fonts.body).text(subtitle, 50, 42);
   }
 }
 

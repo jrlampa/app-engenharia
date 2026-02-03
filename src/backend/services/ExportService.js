@@ -1,10 +1,11 @@
 const ExcelJS = require('exceljs');
 const ReportingService = require('./ReportingService');
 const DataTransformer = require('../utils/DataTransformer');
+const themes = require('../config/exportThemes').default;
 const logger = require('../utils/logger');
 
 /**
- * Service para Exportação de Dados em Excel (v0.3.6 - Stream Edition).
+ * Service para Exportação de Dados em Excel (v0.3.7 - True Streaming).
  * Focado em performance para grandes volumes de dados.
  */
 class ExportService {
@@ -19,7 +20,7 @@ class ExportService {
       const data = DataTransformer.transformMaterialsForExport(report.materiaisConsolidados);
 
       const options = {
-        stream: res, // Pipe direto para o response
+        stream: res, // TRUE STREAMING: Pipe direto para o response
         useStyles: true,
         useSharedStrings: true
       };
@@ -37,25 +38,28 @@ class ExportService {
         { header: 'SUBTOTAL (R$)', key: 'Subtotal', width: 18 }
       ];
 
-      // Estilo Header
-      sheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
-      sheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF007BFF' } };
+      // Estilo Header usando Temas
+      const headerRow = sheet.getRow(1);
+      headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+      headerRow.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: themes.primary.replace('#', 'FF') }
+      };
 
       // 2. Adicionar Linhas por Stream
       data.forEach(row => {
-        sheet.addRow(row).commit(); // Commit envia pro stream e libera RAM
+        sheet.addRow(row).commit(); // Commit envia pro stream chunk por chunk
       });
 
       // 3. Finalizar
       await workbook.commit();
-      logger.info(`Excel gerado via Stream para Projeto #${projectId}`);
+      logger.info(`Excel gerado via True Stream para Projeto #${projectId}`);
     } catch (error) {
       logger.error(`Erro ao exportar Excel (Stream): ${error.message}`);
       throw error;
     }
   }
-
-  // Depreciado: generateProjectExcel (Buffer version). Mantido para compatibilidade se necessário.
 }
 
 module.exports = ExportService;
